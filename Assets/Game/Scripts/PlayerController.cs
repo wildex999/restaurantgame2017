@@ -5,6 +5,9 @@ namespace Assets.Game.Scripts
 {
     public class PlayerController : Photon.PunBehaviour
     {
+        [Tooltip("The layer which is used for raycasting the movement position")]
+        public LayerMask movementLayer;
+
         NavMeshAgent agent;
 
         void Start()
@@ -24,8 +27,7 @@ namespace Assets.Game.Scripts
             if (Input.GetButtonDown("Fire2"))
             {
                 RaycastHit hit;
-
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, movementLayer))
                 {
                     agent.destination = hit.point;
                 }
