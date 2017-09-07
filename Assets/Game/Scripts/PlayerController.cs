@@ -14,14 +14,14 @@ namespace Assets.Game.Scripts
 
         private void Update()
         {
-            if (photonView.isMine)
+            if (photonView.isMine || PhotonNetwork.connected != true)
                 LocalUpdate();
         }
 
         private void LocalUpdate()
         {
             //TODO: Rewrite this to use Input configuration and hit specific "Click" object(Floor plate)
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetButtonDown("Fire2"))
             {
                 RaycastHit hit;
 
