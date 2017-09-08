@@ -8,6 +8,10 @@ namespace Assets.Game.Scripts
         public GameObject playerPrefab;
         public Transform spawnPoint;
 
+        //Local
+        public PlayerController localPlayer;
+        public PlayerRoles localPlayerRole;
+
         #region Photon Messages
 
         public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
@@ -41,7 +45,9 @@ namespace Assets.Game.Scripts
             }
 
             Debug.Log("Instantiating Local player");
-            PhotonNetwork.Instantiate(this.playerPrefab.name, spawnPoint.position, Quaternion.identity, 0);
+            GameObject localPlayerObj = PhotonNetwork.Instantiate(this.playerPrefab.name, spawnPoint.position, Quaternion.identity, 0);
+            localPlayer = localPlayerObj.GetComponent<PlayerController>();
+            localPlayerRole = PlayerRoles.Employee; //TODO: Allow player to select role on joining
         }
 
         public void LeaveRoom()
