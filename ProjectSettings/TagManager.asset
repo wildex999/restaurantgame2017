@@ -7,6 +7,9 @@ TagManager:
   - TableGroup
   - Chair
   - Table
+  - Customer
+  - CustomerGroup
+  - MainCanvas
   layers:
   - Default
   - TransparentFX

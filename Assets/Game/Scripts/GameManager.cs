@@ -1,12 +1,16 @@
-﻿using UnityEngine;
+﻿using Assets.Game.Scripts.Customers;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Assets.Game.Scripts
 {
     public class GameManager : Photon.PunBehaviour
     {
+        
         public GameObject playerPrefab;
-        public Transform spawnPoint;
+        public Transform playerSpawn;
+        public CustomerSpawn customerSpawn;
 
         //Local
         public PlayerController localPlayer;
@@ -36,7 +40,7 @@ namespace Assets.Game.Scripts
 
         #endregion
 
-        private void Start()
+        void Start()
         {
             if (playerPrefab == null)
             {
@@ -45,7 +49,7 @@ namespace Assets.Game.Scripts
             }
 
             Debug.Log("Instantiating Local player");
-            GameObject localPlayerObj = PhotonNetwork.Instantiate(this.playerPrefab.name, spawnPoint.position, Quaternion.identity, 0);
+            GameObject localPlayerObj = PhotonNetwork.Instantiate(this.playerPrefab.name, playerSpawn.position, Quaternion.identity, 0);
             localPlayer = localPlayerObj.GetComponent<PlayerController>();
             localPlayerRole = PlayerRoles.Employee; //TODO: Allow player to select role on joining
         }

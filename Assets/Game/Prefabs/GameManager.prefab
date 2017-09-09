@@ -53,4 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1165149932100814, guid: 2f5c2ff60ca06504fbb3616b298c8cd4,
     type: 2}
-  spawnPoint: {fileID: 0}
+  playerSpawn: {fileID: 0}
+  customerSpawn: {fileID: 0}
+  localPlayer: {fileID: 0}
+  localPlayerRole: 0
