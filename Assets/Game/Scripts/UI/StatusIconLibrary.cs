@@ -8,8 +8,11 @@ namespace Assets.Game.Scripts.UI
     {
         static StatusIconLibrary instance;
 
+        //Prefabs
         public GameStatusIcon waitingTable;
-        public GameObject selectTablePanel;
+
+        //Singletons/Static
+        public GameObject TableSelectionUi;
 
         public static StatusIconLibrary Get()
         {

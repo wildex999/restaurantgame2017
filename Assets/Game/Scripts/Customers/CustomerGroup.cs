@@ -43,6 +43,11 @@ namespace Assets.Game.Scripts.Customers
             }
         }
 
+        public int GetCustomerCount()
+        {
+            return transform.childCount;
+        }
+
         private void OnMouseOver()
         {
             foreach(MeshRenderer renderer in gameObject.GetComponentsInChildren<MeshRenderer>())

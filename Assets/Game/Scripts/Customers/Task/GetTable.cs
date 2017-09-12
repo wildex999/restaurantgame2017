@@ -1,4 +1,5 @@
 ﻿using Assets.Game.Scripts.UI;
+using Assets.Game.Scripts.UI.TableSelect;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -107,7 +108,9 @@ namespace Assets.Game.Scripts.Customers.Task
 
             //Open the Table selection screen
             //TODO: Disable other input while selecting table
-            Instantiate(StatusIconLibrary.Get().selectTablePanel, mainCanvas.transform);
+            TableGroupSelection.customerCount = group.GetCustomerCount();
+            GameObject tableSelection = StatusIconLibrary.Get().TableSelectionUi;
+            tableSelection.SetActive(true);
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

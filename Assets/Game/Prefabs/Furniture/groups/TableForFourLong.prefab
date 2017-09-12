@@ -53,6 +53,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4453116580028744}
+  - component: {fileID: 114520104642387514}
   m_Layer: 0
   m_Name: TableForFourLong
   m_TagString: TableGroup
@@ -407,3 +408,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 68.575, y: 12.508998, z: 2.2600377}
   m_Center: {x: -15.710939, y: 0.0000018901193, z: -0.093147986}
+--- !u!114 &114520104642387514
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1447132913358940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4662dd5d7abbfbb4b95ca5cecb783bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chairs: []

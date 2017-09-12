@@ -10,6 +10,7 @@ TagManager:
   - Customer
   - CustomerGroup
   - MainCanvas
+  - TableSelectionUi
   layers:
   - Default
   - TransparentFX
