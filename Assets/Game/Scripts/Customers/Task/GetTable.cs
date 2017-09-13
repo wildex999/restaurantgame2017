@@ -1,6 +1,8 @@
-﻿using Assets.Game.Scripts.UI;
+﻿using Assets.Game.Scripts.Tables;
+using Assets.Game.Scripts.UI;
 using Assets.Game.Scripts.UI.TableSelect;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,6 +29,7 @@ namespace Assets.Game.Scripts.Customers.Task
         CustomerGroup group;
         CustomerQueue queue;
         NavMeshAgent agent;
+        TableGroup targetTable;
 
         GameObject mainCanvas;
         GameStatusIcon currentIcon;
@@ -47,8 +50,15 @@ namespace Assets.Game.Scripts.Customers.Task
             if (photonView.isMine)
                 UpdateMaster();
 
-            //Updater the visual for all clients
-
+            //Common update for master and all clients
+            switch(state)
+            {
+                case State.WaitForTable:
+                    //Update Icon to indicate satisfaction
+                    currentIcon.SetFade(1f - (group.satisfaction / 100f));
+                    break;
+            }
+            
         }
 
         private void UpdateMaster()
@@ -71,7 +81,12 @@ namespace Assets.Game.Scripts.Customers.Task
                     break;
 
                 case State.WaitForTable:
+                    //Decrease satisfaction
+                    group.satisfaction -= (100f / group.patience) * Time.deltaTime;
+                    break;
 
+                case State.MoveToTable:
+                    //TODO: Sit if close to table
                     break;
             }
         }
@@ -96,6 +111,10 @@ namespace Assets.Game.Scripts.Customers.Task
                     currentIcon = Instantiate(StatusIconLibrary.Get().waitingTable, mainCanvas.transform);
                     currentIcon.Follow(this.gameObject);
                     break;
+
+                case State.MoveToTable:
+                    agent.SetDestination(targetTable.transform.position);
+                    break;
             }
         }
 
@@ -104,13 +123,44 @@ namespace Assets.Game.Scripts.Customers.Task
             if (state != State.WaitForTable)
                 return;
 
-            //TODO: Move Employee towards group.
+            //Task Employee with seating the customers
+            GameManager.instance.localPlayer.SeatCustomerGroup(group);
+        }
 
-            //Open the Table selection screen
-            //TODO: Disable other input while selecting table
-            TableGroupSelection.customerCount = group.GetCustomerCount();
-            GameObject tableSelection = StatusIconLibrary.Get().TableSelectionUi;
-            tableSelection.SetActive(true);
+        [PunRPC]
+        public void SetTable(int tableId)
+        {
+            if (!PhotonNetwork.isMasterClient)
+                return;
+
+            PhotonView tableObj = PhotonView.Find(tableId);
+            if(tableObj == null)
+            {
+                Debug.LogError("Failed to find target table: " + tableId);
+                return;
+            }
+            targetTable = tableObj.GetComponent<TableGroup>();
+
+            //Occupy Seats
+            Queue<Customer> customers = new Queue<Customer>(group.GetCustomers());
+            foreach(Chair chair in targetTable.GetChairs())
+            {
+                if (customers.Count == 0)
+                    break;
+
+                if(chair.seatedCustomer == null)
+                    chair.seatedCustomer = customers.Dequeue();
+            }
+
+            //Move Customers to their seats
+            //TODO: Move each customer sepparate from group
+            targetTable = tableObj.GetComponent<TableGroup>();
+            SwitchState(State.MoveToTable);
+        }
+
+        public bool AwaitingTable()
+        {
+            return state == State.WaitForTable;
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

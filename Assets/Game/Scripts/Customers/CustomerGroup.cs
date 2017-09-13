@@ -9,7 +9,9 @@ namespace Assets.Game.Scripts.Customers
 {
     public class CustomerGroup : Photon.PunBehaviour, IPunObservable
     {
+        [Tooltip("Satisfaction in Percentage")]
         public float satisfaction = 100;
+        [Tooltip("Patience in Percentage. Higher patience means slower Satisfaction loss.")]
         public float patience = 100;
 
         List<Outline> outlines;
@@ -46,6 +48,11 @@ namespace Assets.Game.Scripts.Customers
         public int GetCustomerCount()
         {
             return transform.childCount;
+        }
+
+        public Customer[] GetCustomers()
+        {
+            return GetComponentsInChildren<Customer>();
         }
 
         private void OnMouseOver()

@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4775948201617018}
   - component: {fileID: 33711794698406860}
   - component: {fileID: 23397985765451332}
+  - component: {fileID: 114552779573086590}
+  - component: {fileID: 114854114120736008}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -56,6 +58,8 @@ GameObject:
   - component: {fileID: 4112493302596922}
   - component: {fileID: 33481788556584696}
   - component: {fileID: 23209652671993180}
+  - component: {fileID: 114263777832123610}
+  - component: {fileID: 114406724818461918}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -73,6 +77,8 @@ GameObject:
   - component: {fileID: 4618198433093300}
   - component: {fileID: 33938157513868794}
   - component: {fileID: 23992393897498266}
+  - component: {fileID: 114418547764168010}
+  - component: {fileID: 114970536023844652}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -89,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4743478112770770}
   - component: {fileID: 114587664166564818}
+  - component: {fileID: 114053008234901440}
   m_Layer: 0
   m_Name: TableForEight
   m_TagString: TableGroup
@@ -106,6 +113,8 @@ GameObject:
   - component: {fileID: 4023645278796664}
   - component: {fileID: 33390866081930268}
   - component: {fileID: 23693016264499726}
+  - component: {fileID: 114227384403413882}
+  - component: {fileID: 114942866751914136}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -123,6 +132,8 @@ GameObject:
   - component: {fileID: 4600704984527550}
   - component: {fileID: 33085477865958124}
   - component: {fileID: 23310466305834270}
+  - component: {fileID: 114176528249317150}
+  - component: {fileID: 114526993551662814}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -140,6 +151,8 @@ GameObject:
   - component: {fileID: 4687051604231476}
   - component: {fileID: 33634550048175258}
   - component: {fileID: 23246451079030470}
+  - component: {fileID: 114112641740915780}
+  - component: {fileID: 114713889715067154}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -157,6 +170,8 @@ GameObject:
   - component: {fileID: 4043939744761058}
   - component: {fileID: 33338946734674346}
   - component: {fileID: 23950993856149788}
+  - component: {fileID: 114009546746114144}
+  - component: {fileID: 114390535755375730}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -174,6 +189,8 @@ GameObject:
   - component: {fileID: 4270021093010734}
   - component: {fileID: 33948803795517108}
   - component: {fileID: 23977528914783792}
+  - component: {fileID: 114470323495732742}
+  - component: {fileID: 114039898646208146}
   m_Layer: 0
   m_Name: stool
   m_TagString: Untagged
@@ -692,6 +709,288 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 64.739426, y: 22.025448, z: 2.2600377}
   m_Center: {x: 15.696623, y: -0.0000023661032, z: -0.093147986}
+--- !u!114 &114009546746114144
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1864486080160720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114390535755375730}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114039898646208146
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1930428659567588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114053008234901440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1462719311732292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 0
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114112641740915780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1790629136585376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114713889715067154}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114176528249317150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1644601159720824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114526993551662814}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114227384403413882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1525501200967424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114942866751914136}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114263777832123610
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1306990764925896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114406724818461918}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114390535755375730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1864486080160720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114406724818461918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1306990764925896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114418547764168010
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1346941091066842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114970536023844652}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114470323495732742
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1930428659567588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114039898646208146}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114526993551662814
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1644601159720824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114552779573086590
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1015342171656190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114854114120736008}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &114587664166564818
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -704,3 +1003,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chairs: []
+--- !u!114 &114713889715067154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1790629136585376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114854114120736008
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1015342171656190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114942866751914136
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1525501200967424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114970536023844652
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1346941091066842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}

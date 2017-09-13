@@ -7,6 +7,7 @@ namespace Assets.Game.Scripts
 {
     public class GameManager : Photon.PunBehaviour
     {
+        public static GameManager instance;
         
         public GameObject playerPrefab;
         public Transform playerSpawn;
@@ -39,6 +40,11 @@ namespace Assets.Game.Scripts
 
 
         #endregion
+
+        private void Awake()
+        {
+            instance = this;
+        }
 
         void Start()
         {

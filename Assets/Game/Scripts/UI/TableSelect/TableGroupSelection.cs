@@ -1,4 +1,5 @@
-﻿using Assets.Game.Scripts.Tables;
+﻿using Assets.Game.Scripts.Customers;
+using Assets.Game.Scripts.Tables;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,14 +15,16 @@ namespace Assets.Game.Scripts.UI.TableSelect
         public Color colorChairFree = Color.green;
         public Color colorChairHighlight = Color.white;
 
+        TableSelection tableSelectionUi;
         List<GameObject> chairs;
         GameObject table;
 
-        public static int customerCount = 0; //TODO: Move away from singleton static, and instead use the parent object
         bool hover = false;
 
         private void Start()
         {
+            tableSelectionUi = GetComponentInParent<TableSelection>();
+
             //Get chairs
             chairs = new List<GameObject>();
             foreach(Transform child in transform)
@@ -41,7 +44,7 @@ namespace Assets.Game.Scripts.UI.TableSelect
 
         public void OnPointerEnter()
         {
-            if (CountFreeChairs() >= customerCount)
+            if (CountFreeChairs() >= tableSelectionUi.GetCustomerCount())
             {
                 hover = true;
                 UpdateChairColors();
@@ -52,6 +55,23 @@ namespace Assets.Game.Scripts.UI.TableSelect
         {
             hover = false;
             UpdateChairColors();
+        }
+
+        public void OnClick()
+        {
+            CustomerGroup customerGroup = tableSelectionUi.GetGroup();
+            if(customerGroup == null)
+            {
+                Debug.LogError("Customer Group is null when selecting table");
+                return;
+            }
+
+            //Send customers to their new table(On Master client)
+            int tableViewId = boundGroup.GetComponent<PhotonView>().photonView.viewID;
+            customerGroup.GetComponent<PhotonView>().RPC("SetTable", PhotonTargets.MasterClient, tableViewId);
+
+            //End Table Selection for player
+            tableSelectionUi.Close();
         }
 
         private int CountFreeChairs()
@@ -70,7 +90,7 @@ namespace Assets.Game.Scripts.UI.TableSelect
         {
             List<Chair> floorChairs = boundGroup.GetChairs();
             int chairIndex = 0;
-            int toSeat = customerCount;
+            int toSeat = tableSelectionUi.GetCustomerCount();
             foreach(GameObject chair in chairs)
             {
                 Chair floorChair = floorChairs[chairIndex++];
@@ -90,15 +110,6 @@ namespace Assets.Game.Scripts.UI.TableSelect
 
                 chairImage.color = colorChairFree;
             }
-        }
-
-        /// <summary>
-        /// Set the number of customers looking for a table, which is how many chairs to highlight.
-        /// </summary>
-        /// <param name="customers"></param>
-        public void SetCustomerCount(int customers)
-        {
-            customerCount = customers;
         }
     }
 }

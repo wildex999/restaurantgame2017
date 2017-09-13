@@ -12,7 +12,7 @@ namespace Assets.Game.Scripts.UI
         public GameStatusIcon waitingTable;
 
         //Singletons/Static
-        public GameObject TableSelectionUi;
+        public TableSelection TableSelectionUi;
 
         public static StatusIconLibrary Get()
         {

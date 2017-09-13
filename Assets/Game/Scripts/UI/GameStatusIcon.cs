@@ -9,7 +9,6 @@ namespace Assets.Game.Scripts.UI
         [HideInInspector]
         public FadeBetweenImages imageFade;
 
-
         void Start()
         {
             follow = GetComponent<UiFollowGameObject>();

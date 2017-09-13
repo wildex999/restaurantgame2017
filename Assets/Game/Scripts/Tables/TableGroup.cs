@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Game.Scripts.Tables
 {
-    public class TableGroup : MonoBehaviour
+    public class TableGroup : Photon.PunBehaviour
     {
         public List<Chair> chairs;
 

@@ -38,6 +38,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4158483111926002}
   - component: {fileID: 114443530139579108}
+  - component: {fileID: 114539674917342358}
   m_Layer: 0
   m_Name: TableForTwo
   m_TagString: TableGroup
@@ -55,6 +56,8 @@ GameObject:
   - component: {fileID: 4197799215571672}
   - component: {fileID: 33951701973043042}
   - component: {fileID: 23350136176907090}
+  - component: {fileID: 114184928497775104}
+  - component: {fileID: 114161633668914630}
   m_Layer: 0
   m_Name: chair
   m_TagString: Chair
@@ -72,6 +75,8 @@ GameObject:
   - component: {fileID: 4920698613253886}
   - component: {fileID: 33652733103913050}
   - component: {fileID: 23862916082565124}
+  - component: {fileID: 114905907816666852}
+  - component: {fileID: 114487479373097660}
   m_Layer: 0
   m_Name: chair
   m_TagString: Chair
@@ -266,6 +271,44 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 16.984669, y: 22.025448, z: 2.2600386}
   m_Center: {x: 0.000014781954, y: -0.0000014305126, z: -0.09314745}
+--- !u!114 &114161633668914630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1298442964397922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114184928497775104
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1298442964397922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114161633668914630}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
 --- !u!114 &114443530139579108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -278,3 +321,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chairs: []
+--- !u!114 &114487479373097660
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1480682437879070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 440b306e15fcd75418790912b71c96d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seatedCustomer: {fileID: 0}
+--- !u!114 &114539674917342358
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1117740952597074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 0
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114905907816666852
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1480682437879070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114487479373097660}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0

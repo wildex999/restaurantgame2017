@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Game.Scripts.Customers;
+using Assets.Game.Scripts.Player.Actions;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace Assets.Game.Scripts
@@ -7,6 +9,12 @@ namespace Assets.Game.Scripts
     {
         [Tooltip("The layer which is used for raycasting the movement position")]
         public LayerMask movementLayer;
+        [Tooltip("How fast the character turns towards the new destination")]
+        public float rotationSpeed = 16f;
+
+        [HideInInspector]
+        public bool allowUserInput = true;
+
 
         NavMeshAgent agent;
 
@@ -19,19 +27,50 @@ namespace Assets.Game.Scripts
         {
             if (photonView.isMine || PhotonNetwork.connected != true)
                 LocalUpdate();
+
+            //Turn the agent
+            Vector3 direction = (agent.destination - transform.position).normalized;
+            if (direction.magnitude > 0f)
+            {
+                Quaternion targetDir = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetDir, Time.deltaTime * rotationSpeed);
+            }
         }
 
         private void LocalUpdate()
         {
-            //TODO: Rewrite this to use Input configuration and hit specific "Click" object(Floor plate)
-            if (Input.GetButtonDown("Fire2"))
+            if (allowUserInput)
             {
-                RaycastHit hit;
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, movementLayer))
+                if (Input.GetButtonDown("Fire2"))
                 {
-                    agent.destination = hit.point;
+                    //Remove any current actions (TODO: Write a more generic system for this)
+                    Destroy(GetComponent<SeatCustomers>());
+
+                    RaycastHit hit;
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, movementLayer))
+                        SetDestination(hit.point);
                 }
             }
+        }
+
+        public void SeatCustomerGroup(CustomerGroup group)
+        {
+            if (!gameObject.GetComponent<SeatCustomers>())
+            {
+                SeatCustomers task = gameObject.AddComponent<SeatCustomers>();
+                task.SetCustomerGroup(group);
+            }
+
+        }
+
+        public void SetDestination(Vector3 destination)
+        {
+            agent.destination = destination;
+        }
+
+        public void StopMoving()
+        {
+            agent.destination = transform.position;
         }
     }
 }

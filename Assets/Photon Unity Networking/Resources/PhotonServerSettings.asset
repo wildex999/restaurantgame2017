@@ -44,4 +44,5 @@ MonoBehaviour:
   - TaggedPlayer
   - NetworkSetGroup
   - ActionGetTable
+  - SetTable
   DisableAutoOpenWizard: 1

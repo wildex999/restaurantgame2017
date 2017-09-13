@@ -18,8 +18,6 @@ namespace Assets.Game.Scripts.UI
                 return;
             if (uiCamera == null)
                 uiCamera = Camera.main;
-            if (offset == null)
-                offset = Vector2.zero;
 
             Vector2 pos = uiCamera.WorldToScreenPoint(target.transform.position + offset);
             transform.position = pos;
