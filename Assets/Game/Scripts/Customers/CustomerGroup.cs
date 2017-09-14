@@ -9,8 +9,8 @@ namespace Assets.Game.Scripts.Customers
 {
     public class CustomerGroup : Photon.PunBehaviour, IPunObservable
     {
-        [Tooltip("Satisfaction in Percentage")]
-        public float satisfaction = 100;
+        [Tooltip("How long they will wait before becoming dissatisfied, as a percentage.")]
+        public float waiting = 100; //TODO: Find a better name for this variable
         [Tooltip("Patience in Percentage. Higher patience means slower Satisfaction loss.")]
         public float patience = 100;
 
@@ -19,10 +19,19 @@ namespace Assets.Game.Scripts.Customers
         private void Start()
         {
             outlines = new List<Outline>();
-            if (photonView.isMine)
-            {
+            StartActionGetTable();
+        }
+
+        public void StartActionGetTable()
+        {
+            if(photonView.isMine)
                 photonView.RPC("ActionGetTable", PhotonTargets.AllBuffered);
-            }
+        }
+
+        public void StartActionOrderFood()
+        {
+            if(photonView.isMine)
+                photonView.RPC("ActionOrderFood", PhotonTargets.AllBuffered);
         }
 
         [PunRPC]
@@ -32,15 +41,22 @@ namespace Assets.Game.Scripts.Customers
             photonView.ObservedComponents.Add(action);
         }
 
+        [PunRPC]
+        void ActionOrderFood()
+        {
+            OrderFood action = gameObject.AddComponent<OrderFood>();
+            photonView.ObservedComponents.Add(action);
+        }
+
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if(stream.isWriting)
             {
-                stream.SendNext(satisfaction);
+                stream.SendNext(waiting);
                 stream.SendNext(patience);
             } else
             {
-                satisfaction = (float)stream.ReceiveNext();
+                waiting = (float)stream.ReceiveNext();
                 patience = (float)stream.ReceiveNext();
             }
         }
@@ -53,6 +69,14 @@ namespace Assets.Game.Scripts.Customers
         public Customer[] GetCustomers()
         {
             return GetComponentsInChildren<Customer>();
+        }
+
+        public bool HasCustomer(Customer customer)
+        {
+            foreach (Customer c in GetComponentsInChildren<Customer>())
+                if(c == customer)
+                    return true;
+            return false;
         }
 
         private void OnMouseOver()

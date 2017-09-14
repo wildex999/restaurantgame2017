@@ -8,12 +8,12 @@ namespace Assets.Game.Scripts.Customers
     /// </summary>
     public class CustomerQueue : MonoBehaviour
     {
-        Queue<CustomerGroup> queue;
+        List<CustomerGroup> queue;
         float positionSpacing = 1.5f;
 
         void Start()
         {
-            queue = new Queue<CustomerGroup>();
+            queue = new List<CustomerGroup>();
         }
 
         public Vector3 NextQueuePosition()
@@ -25,17 +25,25 @@ namespace Assets.Game.Scripts.Customers
 
         public void EnterQueue(CustomerGroup group)
         {
-            queue.Enqueue(group);
+            queue.Add(group);
         }
 
         public void LeaveQueue(CustomerGroup group)
         {
-
+            queue.Remove(group);
         }
 
-        /*public Vector3 GetQueuePosition(CustomerGroup group)
+        public Vector3 GetQueuePosition(CustomerGroup group)
         {
+            float offset = 0;
+            foreach(CustomerGroup queueGroup in queue)
+            {
+                if (queueGroup == group)
+                    break;
+                offset += positionSpacing;
+            }
 
-        }*/
+            return transform.position + transform.TransformDirection(new Vector3(0, 0, offset));
+        }
     }
 }

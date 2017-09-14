@@ -66,6 +66,9 @@ namespace Assets.Game.Scripts.UI.TableSelect
                 return;
             }
 
+            if (customerGroup.GetCustomerCount() > CountFreeChairs())
+                return;
+
             //Send customers to their new table(On Master client)
             int tableViewId = boundGroup.GetComponent<PhotonView>().photonView.viewID;
             customerGroup.GetComponent<PhotonView>().RPC("SetTable", PhotonTargets.MasterClient, tableViewId);

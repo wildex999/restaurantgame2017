@@ -31,7 +31,6 @@ namespace Assets.Game.Scripts.Customers.Task
         NavMeshAgent agent;
         TableGroup targetTable;
 
-        GameObject mainCanvas;
         GameStatusIcon currentIcon;
 
         private void Start()
@@ -40,8 +39,6 @@ namespace Assets.Game.Scripts.Customers.Task
             agent = GetComponent<NavMeshAgent>();
             queue = GameObject.FindObjectOfType<CustomerQueue>();
             group = GetComponent<CustomerGroup>();
-
-            mainCanvas = GameObject.FindGameObjectWithTag("MainCanvas");
         }
 
         private void Update()
@@ -54,8 +51,8 @@ namespace Assets.Game.Scripts.Customers.Task
             switch(state)
             {
                 case State.WaitForTable:
-                    //Update Icon to indicate satisfaction
-                    currentIcon.SetFade(1f - (group.satisfaction / 100f));
+                    //Update Icon to indicate waiting time
+                    currentIcon.SetFade(1f - (group.waiting / 100f));
                     break;
             }
             
@@ -63,30 +60,52 @@ namespace Assets.Game.Scripts.Customers.Task
 
         private void UpdateMaster()
         {
+            Vector3 point;
+
             switch (state)
             {
                 case State.MoveToDoor:
-                    Vector3 point = queue.NextQueuePosition();
+                    point = queue.NextQueuePosition();
 
                     if (agent.destination != point)
                         agent.SetDestination(point);
 
                     //Enter queue if near
                     if (Vector3.Distance(transform.position, point) < 2f)
-                    {
-                        queue.EnterQueue(group);
                         SwitchState(State.WaitForTable);
-                    }
 
                     break;
 
                 case State.WaitForTable:
-                    //Decrease satisfaction
-                    group.satisfaction -= (100f / group.patience) * Time.deltaTime;
+                    //Move along the queue
+                    point = queue.GetQueuePosition(group);
+                    if (agent.destination != point)
+                        agent.SetDestination(point);
+
+                    //Wait
+                    group.waiting -= (100f / group.patience) * Time.deltaTime;
                     break;
 
                 case State.MoveToTable:
-                    //TODO: Sit if close to table
+                    //Sit if close to the table
+                    if(Vector3.Distance(transform.position, targetTable.transform.position) < 1f)
+                    {
+                        group.GetComponent<NavMeshAgent>().enabled = false;
+                        group.transform.position = targetTable.transform.position;
+                        foreach(Chair chair in targetTable.GetChairs())
+                        {
+                            Customer customer = chair.seatedCustomer;
+                            if (customer == null)
+                                continue;
+                            if (!group.HasCustomer(customer))
+                                continue;
+
+                            customer.transform.position = chair.transform.position;
+                        }
+
+                        photonView.RPC("End", PhotonTargets.All);
+                        group.StartActionOrderFood();
+                    }
                     break;
             }
         }
@@ -100,7 +119,12 @@ namespace Assets.Game.Scripts.Customers.Task
             switch(oldState)
             {
                 case State.WaitForTable:
+                    queue.LeaveQueue(group);
                     Destroy(currentIcon.gameObject);
+
+                    group.waiting = 100;
+                    //TODO: Show Green tick icon indicating completion
+
                     break;
             }
 
@@ -108,8 +132,9 @@ namespace Assets.Game.Scripts.Customers.Task
             switch(state)
             {
                 case State.WaitForTable:
-                    currentIcon = Instantiate(StatusIconLibrary.Get().waitingTable, mainCanvas.transform);
-                    currentIcon.Follow(this.gameObject);
+                    queue.EnterQueue(group);
+                    currentIcon = Instantiate(StatusIconLibrary.Get().iconTable, StatusIconLibrary.Get().mainCanvas.transform);
+                    currentIcon.Follow(gameObject);
                     break;
 
                 case State.MoveToTable:
@@ -156,6 +181,12 @@ namespace Assets.Game.Scripts.Customers.Task
             //TODO: Move each customer sepparate from group
             targetTable = tableObj.GetComponent<TableGroup>();
             SwitchState(State.MoveToTable);
+        }
+
+        [PunRPC]
+        public void End()
+        {
+            Destroy(this);
         }
 
         public bool AwaitingTable()

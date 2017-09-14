@@ -9,10 +9,12 @@ namespace Assets.Game.Scripts.UI
         static StatusIconLibrary instance;
 
         //Prefabs
-        public GameStatusIcon waitingTable;
+        public GameStatusIcon iconTable;
+        public GameStatusIcon iconMenu;
 
-        //Singletons/Static
+        //Instances
         public TableSelection TableSelectionUi;
+        public GameObject mainCanvas;
 
         public static StatusIconLibrary Get()
         {

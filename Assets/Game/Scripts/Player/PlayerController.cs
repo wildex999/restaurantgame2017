@@ -65,7 +65,7 @@ namespace Assets.Game.Scripts
 
         public void SetDestination(Vector3 destination)
         {
-            agent.destination = destination;
+            agent.SetDestination(destination);
         }
 
         public void StopMoving()

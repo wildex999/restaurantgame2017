@@ -45,4 +45,6 @@ MonoBehaviour:
   - NetworkSetGroup
   - ActionGetTable
   - SetTable
+  - ActionOrderFood
+  - End
   DisableAutoOpenWizard: 1
