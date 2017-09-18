@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 114614405217725320}
   - component: {fileID: 195532443024959734}
   - component: {fileID: 54106600981859970}
+  - component: {fileID: 114547861899462328}
   m_Layer: 0
   m_Name: CustomerGroup
   m_TagString: CustomerGroup
@@ -59,6 +60,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114547861899462328
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1663774993202908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e1e8b45f18812478e76237e1b259ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iconOutlineSize: 2
+  iconOutlineColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &114614405217725320
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -162,7 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe9be1b1ddef8d4fbf5051f469a0c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  satisfaction: 100
+  waiting: 100
   patience: 100
 --- !u!195 &195532443024959734
 NavMeshAgent:

@@ -16,9 +16,6 @@ namespace Assets.Game.Scripts.Player.Actions
     [RequireComponent(typeof(PlayerController))]
     public class SeatCustomers : MonoBehaviour
     {
-        [Tooltip("How close to a Customer Group to be before opening the Table Selection")]
-        public float distanceToOpenTableSelection = 1f;
-
         PlayerController controller;
         CustomerGroup group;
         State state;
@@ -50,7 +47,7 @@ namespace Assets.Game.Scripts.Player.Actions
             switch(state)
             {
                 case State.GoToCustomer:
-                    if (Vector3.Distance(transform.position, group.transform.position) < distanceToOpenTableSelection)
+                    if (Vector3.Distance(transform.position, group.transform.position) < controller.actionDistance)
                         SwitchState(State.SelectTable);
                     break;
             }

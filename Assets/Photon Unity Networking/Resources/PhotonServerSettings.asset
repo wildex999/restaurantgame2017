@@ -47,4 +47,7 @@ MonoBehaviour:
   - SetTable
   - ActionOrderFood
   - End
+  - StopNavigation
+  - ReceiveOrder
+  - TakeOrder
   DisableAutoOpenWizard: 1

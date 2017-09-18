@@ -11,6 +11,8 @@ namespace Assets.Game.Scripts.UI
         //Prefabs
         public GameStatusIcon iconTable;
         public GameStatusIcon iconMenu;
+        public GameStatusIcon iconFood;
+        public GameStatusIcon iconArrow;
 
         //Instances
         public TableSelection TableSelectionUi;

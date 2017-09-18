@@ -54,4 +54,8 @@ MonoBehaviour:
   iconTable: {fileID: 114474501617213282, guid: b53c347ea1d282540a58d06d40903f87,
     type: 2}
   iconMenu: {fileID: 114474501617213282, guid: c64e798a96047f24380fa4aec13e0eaf, type: 2}
+  iconFood: {fileID: 114049050329184004, guid: ed16ff21c4aafd248af290058f11e9ef, type: 2}
+  iconArrow: {fileID: 114258127939504688, guid: 5ffe04e8fb5fa1343bcaedf2e954e54a,
+    type: 2}
   TableSelectionUi: {fileID: 0}
+  mainCanvas: {fileID: 0}

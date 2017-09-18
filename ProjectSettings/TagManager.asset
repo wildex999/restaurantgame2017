@@ -11,6 +11,7 @@ TagManager:
   - CustomerGroup
   - MainCanvas
   - TableSelectionUi
+  - Orders
   layers:
   - Default
   - TransparentFX

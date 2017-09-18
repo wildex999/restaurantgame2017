@@ -1,9 +1,5 @@
-﻿
-using System;
-using Assets.Game.Scripts.Customers.Task;
+﻿using Assets.Game.Scripts.Customers.Task;
 using UnityEngine;
-using cakeslice;
-using System.Collections.Generic;
 
 namespace Assets.Game.Scripts.Customers
 {
@@ -14,11 +10,8 @@ namespace Assets.Game.Scripts.Customers
         [Tooltip("Patience in Percentage. Higher patience means slower Satisfaction loss.")]
         public float patience = 100;
 
-        List<Outline> outlines;
-
         private void Start()
         {
-            outlines = new List<Outline>();
             StartActionGetTable();
         }
 
@@ -77,21 +70,6 @@ namespace Assets.Game.Scripts.Customers
                 if(c == customer)
                     return true;
             return false;
-        }
-
-        private void OnMouseOver()
-        {
-            foreach(MeshRenderer renderer in gameObject.GetComponentsInChildren<MeshRenderer>())
-            {
-                if(renderer.gameObject.GetComponent<Outline>() == null)
-                    outlines.Add(renderer.gameObject.AddComponent<Outline>());
-            }
-        }
-
-        private void OnMouseExit()
-        {
-            foreach(Outline outline in outlines)
-                Destroy(outline);
         }
     }
 }

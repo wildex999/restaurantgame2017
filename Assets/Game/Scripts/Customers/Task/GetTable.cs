@@ -48,14 +48,14 @@ namespace Assets.Game.Scripts.Customers.Task
                 UpdateMaster();
 
             //Common update for master and all clients
-            switch(state)
+            switch (state)
             {
                 case State.WaitForTable:
                     //Update Icon to indicate waiting time
                     currentIcon.SetFade(1f - (group.waiting / 100f));
                     break;
             }
-            
+
         }
 
         private void UpdateMaster()
@@ -88,11 +88,12 @@ namespace Assets.Game.Scripts.Customers.Task
 
                 case State.MoveToTable:
                     //Sit if close to the table
-                    if(Vector3.Distance(transform.position, targetTable.transform.position) < 1f)
+                    if (Vector3.Distance(transform.position, targetTable.transform.position) < 1f)
                     {
-                        group.GetComponent<NavMeshAgent>().enabled = false;
-                        group.transform.position = targetTable.transform.position;
-                        foreach(Chair chair in targetTable.GetChairs())
+                        photonView.RPC("StopNavigation", PhotonTargets.AllBuffered);
+                        Vector3 tablePos = targetTable.transform.position;
+                        group.transform.position = new Vector3(tablePos.x, group.transform.position.y, tablePos.z);
+                        foreach (Chair chair in targetTable.GetChairs())
                         {
                             Customer customer = chair.seatedCustomer;
                             if (customer == null)
@@ -100,7 +101,8 @@ namespace Assets.Game.Scripts.Customers.Task
                             if (!group.HasCustomer(customer))
                                 continue;
 
-                            customer.transform.position = chair.transform.position;
+                            Vector3 chairPos = chair.transform.position;
+                            customer.transform.position = new Vector3(chairPos.x, customer.transform.position.y, chairPos.z);
                         }
 
                         photonView.RPC("End", PhotonTargets.All);
@@ -112,11 +114,14 @@ namespace Assets.Game.Scripts.Customers.Task
 
         private void SwitchState(State newState)
         {
+            if (newState == state)
+                return;
+
             State oldState = state;
             state = newState;
 
             //Cleanup the old state
-            switch(oldState)
+            switch (oldState)
             {
                 case State.WaitForTable:
                     queue.LeaveQueue(group);
@@ -129,7 +134,7 @@ namespace Assets.Game.Scripts.Customers.Task
             }
 
             //Setup the new state
-            switch(state)
+            switch (state)
             {
                 case State.WaitForTable:
                     queue.EnterQueue(group);
@@ -159,7 +164,7 @@ namespace Assets.Game.Scripts.Customers.Task
                 return;
 
             PhotonView tableObj = PhotonView.Find(tableId);
-            if(tableObj == null)
+            if (tableObj == null)
             {
                 Debug.LogError("Failed to find target table: " + tableId);
                 return;
@@ -168,18 +173,17 @@ namespace Assets.Game.Scripts.Customers.Task
 
             //Occupy Seats
             Queue<Customer> customers = new Queue<Customer>(group.GetCustomers());
-            foreach(Chair chair in targetTable.GetChairs())
+            foreach (Chair chair in targetTable.GetChairs())
             {
                 if (customers.Count == 0)
                     break;
 
-                if(chair.seatedCustomer == null)
+                if (chair.seatedCustomer == null)
                     chair.seatedCustomer = customers.Dequeue();
             }
 
             //Move Customers to their seats
             //TODO: Move each customer sepparate from group
-            targetTable = tableObj.GetComponent<TableGroup>();
             SwitchState(State.MoveToTable);
         }
 
@@ -187,6 +191,12 @@ namespace Assets.Game.Scripts.Customers.Task
         public void End()
         {
             Destroy(this);
+        }
+
+        [PunRPC]
+        public void StopNavigation()
+        {
+            group.GetComponent<NavMeshAgent>().enabled = false;
         }
 
         public bool AwaitingTable()
@@ -202,8 +212,7 @@ namespace Assets.Game.Scripts.Customers.Task
             } else
             {
                 State newState = (State)stream.ReceiveNext();
-                if (newState != state)
-                    SwitchState(newState);
+                SwitchState(newState);
             }
         }
     }

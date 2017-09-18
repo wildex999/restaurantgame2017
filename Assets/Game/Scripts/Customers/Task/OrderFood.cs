@@ -56,6 +56,7 @@ namespace Assets.Game.Scripts.Customers.Task
                     break;
 
                 case State.WaitingOrder:
+                case State.WaitingFood:
                     //Wait
                     group.waiting -= (100f / group.patience) * Time.deltaTime;
                     break;
@@ -64,12 +65,20 @@ namespace Assets.Game.Scripts.Customers.Task
 
         private void SwitchState(State newState)
         {
+            if (state == newState)
+                return;
+
             State oldState = state;
             state = newState;
 
             switch(oldState)
             {
-
+                case State.WaitingOrder:
+                    Destroy(currentIcon.gameObject);
+                    break;
+                case State.WaitingFood:
+                    Destroy(currentIcon.gameObject);
+                    break;
             }
 
             switch(newState)
@@ -78,6 +87,47 @@ namespace Assets.Game.Scripts.Customers.Task
                     currentIcon = Instantiate(StatusIconLibrary.Get().iconMenu, StatusIconLibrary.Get().mainCanvas.transform);
                     currentIcon.Follow(gameObject);
                     break;
+                case State.WaitingFood:
+                    currentIcon = Instantiate(StatusIconLibrary.Get().iconFood, StatusIconLibrary.Get().mainCanvas.transform);
+                    currentIcon.Follow(gameObject);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Take the order for the Customer Group and send it to the requesting player.
+        /// Then proceed to wait for the ordered food.
+        /// </summary>
+        [PunRPC]
+        private void TakeOrder(int senderPlayerId, PhotonMessageInfo info)
+        {
+            if (!PhotonNetwork.isMasterClient)
+                return;
+
+            if (state != State.WaitingOrder)
+            {
+                Debug.LogError("Trying to get Order when not in WaitingOrder state.");
+                return;
+            }
+
+            //Reply with order to client
+            string order = "Test Order";
+            PhotonView senderView = PhotonView.Find(senderPlayerId);
+            senderView.RPC("ReceiveOrder", info.sender, order);
+
+
+            SwitchState(State.WaitingFood);
+        }
+
+        private void OnMouseUpAsButton()
+        {
+            if (state == State.WaitingOrder)
+            {
+                //Task Employee with taking their order
+                GameManager.instance.localPlayer.TakeOrder(group);
+            } else if(state == State.WaitingFood)
+            {
+                GameManager.instance.localPlayer.DeliverFood(group);
             }
         }
 

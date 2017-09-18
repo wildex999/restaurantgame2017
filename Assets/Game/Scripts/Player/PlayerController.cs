@@ -11,6 +11,8 @@ namespace Assets.Game.Scripts
         public LayerMask movementLayer;
         [Tooltip("How fast the character turns towards the new destination")]
         public float rotationSpeed = 16f;
+        [Tooltip("How close to something the Player has to be before acting.")]
+        public float actionDistance = 1f;
 
         [HideInInspector]
         public bool allowUserInput = true;
@@ -55,11 +57,43 @@ namespace Assets.Game.Scripts
 
         public void SeatCustomerGroup(CustomerGroup group)
         {
+            if (!photonView.isMine)
+                return;
+
             if (!gameObject.GetComponent<SeatCustomers>())
             {
                 SeatCustomers task = gameObject.AddComponent<SeatCustomers>();
                 task.SetCustomerGroup(group);
             }
+
+        }
+
+        public void TakeOrder(CustomerGroup group)
+        {
+            if (!photonView.isMine)
+                return;
+
+            if(!gameObject.GetComponent<TakeOrder>())
+            {
+                TakeOrder task = gameObject.AddComponent<TakeOrder>();
+                task.SetCustomerGroup(group);
+            }
+        }
+
+        public void DeliverOrder(Orders orders)
+        {
+            TakeOrder task = gameObject.GetComponent<TakeOrder>();
+            if (task)
+                task.DeliverOrder(orders);
+        }
+
+        public void GetFood()
+        {
+
+        }
+
+        public void DeliverFood(CustomerGroup group)
+        {
 
         }
 
