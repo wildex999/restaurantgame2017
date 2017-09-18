@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114576207561438820}
   - component: {fileID: 114711473271919760}
   m_Layer: 5
-  m_Name: OrdersArrowIcon 1
+  m_Name: OrdersFoodIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 58bbb9d1309350e4c83da7e3f612c515, type: 3}
+  m_Texture: {fileID: 2800000, guid: 448f8ee29521afe4c9b176ba74297757, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 58bbb9d1309350e4c83da7e3f612c515, type: 3}
+  m_Texture: {fileID: 2800000, guid: 4c1329de66cc15f4d96abe78183da40e, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
