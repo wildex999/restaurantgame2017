@@ -12,6 +12,7 @@ TagManager:
   - MainCanvas
   - TableSelectionUi
   - Orders
+  - FoodDesk
   layers:
   - Default
   - TransparentFX

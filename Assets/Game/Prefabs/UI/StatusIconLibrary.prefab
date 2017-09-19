@@ -57,5 +57,7 @@ MonoBehaviour:
   iconFood: {fileID: 114049050329184004, guid: ed16ff21c4aafd248af290058f11e9ef, type: 2}
   iconArrow: {fileID: 114258127939504688, guid: 5ffe04e8fb5fa1343bcaedf2e954e54a,
     type: 2}
+  iconFoodReady: {fileID: 114837318446448704, guid: 18f8fe1d6adbef242a47e4cce26baa79,
+    type: 2}
   TableSelectionUi: {fileID: 0}
   mainCanvas: {fileID: 0}

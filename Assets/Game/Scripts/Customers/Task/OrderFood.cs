@@ -3,17 +3,24 @@ using UnityEngine;
 
 namespace Assets.Game.Scripts.Customers.Task
 {
+    /// <summary>
+    /// Customer Task for Ordering food.
+    /// 1. Read the menu for x amount of time.
+    /// 2. Wait for the Employee to take our Order.
+    /// 3. Wait for the food to be Delivered.
+    /// </summary>
     [RequireComponent(typeof(CustomerGroup))]
     public class OrderFood : Photon.PunBehaviour, IPunObservable
     {
-        enum State
+        public enum State
         {
             ReadingMenu,
             WaitingOrder,
-            WaitingFood
+            WaitingFood,
+            Done
         }
 
-        State state;
+        public State state;
         GameStatusIcon currentIcon;
         CustomerGroup group;
 
@@ -111,12 +118,35 @@ namespace Assets.Game.Scripts.Customers.Task
             }
 
             //Reply with order to client
-            string order = "Test Order";
+            Order order = new Order("Test Order", group);
             PhotonView senderView = PhotonView.Find(senderPlayerId);
             senderView.RPC("ReceiveOrder", info.sender, order);
 
 
             SwitchState(State.WaitingFood);
+        }
+
+        [PunRPC]
+        private void GiveFood(Food food)
+        {
+            if (!PhotonNetwork.isMasterClient)
+                return;
+
+            if(state != State.WaitingFood)
+            {
+                Debug.LogError("Trying to Give Food when not in WaitingFood state.");
+                return;
+            }
+
+            //TODO: Show happy/sad face and do eating
+            photonView.RPC("End", PhotonTargets.All);
+        }
+
+        [PunRPC]
+        private void End()
+        {
+            SwitchState(State.Done);
+            Destroy(this);
         }
 
         private void OnMouseUpAsButton()

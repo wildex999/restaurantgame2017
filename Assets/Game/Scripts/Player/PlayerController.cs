@@ -82,19 +82,34 @@ namespace Assets.Game.Scripts
 
         public void DeliverOrder(Orders orders)
         {
+            if (!photonView.isMine)
+                return;
+
             TakeOrder task = gameObject.GetComponent<TakeOrder>();
             if (task)
                 task.DeliverOrder(orders);
         }
 
-        public void GetFood()
+        public void GetFood(FoodDesk foodDesk)
         {
+            if (!photonView.isMine)
+                return;
 
+            if (!GetComponent<DeliverFood>())
+            {
+                DeliverFood task = gameObject.AddComponent<DeliverFood>();
+                task.foodDesk = foodDesk;
+            }
         }
 
         public void DeliverFood(CustomerGroup group)
         {
+            if (!photonView.isMine)
+                return;
 
+            DeliverFood task = gameObject.GetComponent<DeliverFood>();
+            if (task)
+                task.DeliverTo(group);
         }
 
         public void SetDestination(Vector3 destination)

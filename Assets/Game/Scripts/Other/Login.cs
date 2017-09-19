@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ExitGames.Client.Photon;
+using UnityEngine;
 
 namespace Assets.Game.Scripts
 {
@@ -37,6 +38,13 @@ namespace Assets.Game.Scripts
         {
             labelProgress.SetActive(false);
             panelControl.SetActive(true);
+
+            //Register types
+            //ALWAYS ADD AT THE BOTTOM FOR ID COMPATIBILITY
+            //ALWAYS LEAVE A typeId++ IF A TYPE IS REMOVED, TO MAINTAIN ID COMPATIBILITY
+            byte typeId = 0;
+            PhotonPeer.RegisterType(typeof(Order), typeId++, Order.Serialize, Order.Deserialize);
+            PhotonPeer.RegisterType(typeof(Food), typeId++, Food.Serialize, Food.Deserialize);
         }
 
         /// <summary>

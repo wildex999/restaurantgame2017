@@ -50,4 +50,7 @@ MonoBehaviour:
   - StopNavigation
   - ReceiveOrder
   - TakeOrder
+  - AddOrder
+  - AddFood
+  - GiveFood
   DisableAutoOpenWizard: 1

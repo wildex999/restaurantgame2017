@@ -10,13 +10,31 @@ namespace Assets.Game.Scripts
 
         List<MonoBehaviour> outlines;
 
+        bool hasOutline;
+        bool forceOutline;
+
         private void Start()
         {
             outlines = new List<MonoBehaviour>();
+            hasOutline = false;
+            forceOutline = false;
         }
 
         private void OnMouseOver()
         {
+            AddOutlines();
+        }
+
+        private void OnMouseExit()
+        {
+            RemoveOutlines();
+        }
+
+        private void AddOutlines()
+        {
+            if (hasOutline)
+                return;
+
             //Outline Customers
             foreach (MeshRenderer renderer in gameObject.GetComponentsInChildren<MeshRenderer>())
             {
@@ -40,13 +58,29 @@ namespace Assets.Game.Scripts
                     }
                 }
             }
+
+            hasOutline = true;
         }
 
-        private void OnMouseExit()
+        private void RemoveOutlines()
         {
+            if (!hasOutline || forceOutline)
+                return;
+
             //Remove Outline components
             foreach (MonoBehaviour outline in outlines)
                 Destroy(outline);
+
+            hasOutline = false;
+        }
+
+        public void ForceOutline(bool force)
+        {
+            forceOutline = force;
+            if (force)
+                AddOutlines();
+            else
+                RemoveOutlines();
         }
     }
 }

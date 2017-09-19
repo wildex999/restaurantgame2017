@@ -7,6 +7,7 @@ using UnityEngine.UI;
 namespace Assets.Game.Scripts.Player.Actions
 {
     /// <summary>
+    /// Player Employee task.
     /// 1. Get order from Customer Group
     /// 2. Deliver order to Kitchen
     /// </summary>
@@ -14,26 +15,26 @@ namespace Assets.Game.Scripts.Player.Actions
     public class TakeOrder : Photon.PunBehaviour, IPunObservable
     {
         public CustomerGroup group;
-        public string currentOrder; //Order currently carried by employee
+        public Order currentOrder; //Order currently carried by employee
         public Orders ordersDesk; //Where to deliver the order
 
         PlayerController controller;
 
-        enum State
+        public enum State
         {
             GoToCustomer,
             TakingOrder,
             DeliveringOrder,
             Done
         }
-        State state;
+        public State state;
 
         private void Start()
         {
             controller = GetComponent<PlayerController>();
             controller.SetDestination(group.transform.position);
 
-            currentOrder = "";
+            currentOrder = null;
             ordersDesk = null;
             state = State.GoToCustomer;
         }
@@ -56,6 +57,7 @@ namespace Assets.Game.Scripts.Player.Actions
 
                     if(Vector3.Distance(ordersDesk.transform.position, transform.position) < controller.actionDistance)
                     {
+                        ordersDesk.photonView.RPC("AddOrder", PhotonTargets.MasterClient, currentOrder);
                         SwitchState(State.Done);
                         Destroy(this);
                     }
@@ -80,7 +82,7 @@ namespace Assets.Game.Scripts.Player.Actions
 
                     //Hide icons on all Orders locations
                     foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Orders"))
-                        obj.GetComponent<Orders>().ShowIcon(false);
+                        obj.GetComponent<Orders>().ShowDropIcon(false);
                     break;
             }
 
@@ -93,17 +95,17 @@ namespace Assets.Game.Scripts.Player.Actions
                     break;
                 case State.DeliveringOrder:
                     //TODO: Find better way to update current order
-                    GameObject.Find("CurrentOrder").GetComponent<Text>().text = "Order: " + currentOrder;
+                    GameObject.Find("CurrentOrder").GetComponent<Text>().text = "Order: " + currentOrder.name;
 
                     //Show icon on all valid Order locations
                     foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Orders"))
-                        obj.GetComponent<Orders>().ShowIcon(true);
+                        obj.GetComponent<Orders>().ShowDropIcon(true);
                     break;
             }
         }
 
         [PunRPC]
-        private void ReceiveOrder(string order)
+        private void ReceiveOrder(Order order)
         {
             //If we fail to receive an order, then we stop this action
             if (order == null)

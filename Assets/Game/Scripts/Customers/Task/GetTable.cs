@@ -18,13 +18,13 @@ namespace Assets.Game.Scripts.Customers.Task
     public class GetTable : Photon.PunBehaviour, IPunObservable
     {
 
-        enum State
+        public enum State
         {
             MoveToDoor,
             WaitForTable,
             MoveToTable
         }
-        State state;
+        public State state;
 
         CustomerGroup group;
         CustomerQueue queue;

@@ -18,9 +18,9 @@ namespace Assets.Game.Scripts.Player.Actions
     {
         PlayerController controller;
         CustomerGroup group;
-        State state;
+        public State state;
 
-        enum State
+        public enum State
         {
             GoToCustomer,
             SelectTable,

@@ -13,6 +13,7 @@ namespace Assets.Game.Scripts.UI
         public GameStatusIcon iconMenu;
         public GameStatusIcon iconFood;
         public GameStatusIcon iconArrow;
+        public GameStatusIcon iconFoodReady;
 
         //Instances
         public TableSelection TableSelectionUi;
