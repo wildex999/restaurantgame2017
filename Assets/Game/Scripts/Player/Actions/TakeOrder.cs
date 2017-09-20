@@ -3,6 +3,7 @@ using Assets.Game.Scripts.Customers;
 using Assets.Game.Scripts.Customers.Task;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Game.Scripts.UI;
 
 namespace Assets.Game.Scripts.Player.Actions
 {
@@ -57,6 +58,7 @@ namespace Assets.Game.Scripts.Player.Actions
 
                     if(Vector3.Distance(ordersDesk.transform.position, transform.position) < controller.actionDistance)
                     {
+                        StatusIconLibrary.Get().ShowTaskCompleteTick(ordersDesk.GetDropIcon().transform.position);
                         ordersDesk.photonView.RPC("AddOrder", PhotonTargets.MasterClient, currentOrder);
                         SwitchState(State.Done);
                         Destroy(this);

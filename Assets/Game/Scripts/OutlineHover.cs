@@ -45,7 +45,7 @@ namespace Assets.Game.Scripts
             //Outline icons
             foreach (GameStatusIcon icon in FindObjectsOfType<GameStatusIcon>())
             {
-                if (icon.follow.target == gameObject)
+                if (icon.follow.GetTarget() == gameObject)
                 {
                     //Get the first icon(Which is the one behind, and the one NOT fading away)
                     CanvasRenderer renderer = icon.GetComponentInChildren<CanvasRenderer>();

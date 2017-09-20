@@ -92,10 +92,12 @@ namespace Assets.Game.Scripts.Customers.Task
             {
                 case State.WaitingOrder:
                     currentIcon = Instantiate(StatusIconLibrary.Get().iconMenu, StatusIconLibrary.Get().mainCanvas.transform);
+                    currentIcon.StopOverlap = true;
                     currentIcon.Follow(gameObject);
                     break;
                 case State.WaitingFood:
                     currentIcon = Instantiate(StatusIconLibrary.Get().iconFood, StatusIconLibrary.Get().mainCanvas.transform);
+                    currentIcon.StopOverlap = true;
                     currentIcon.Follow(gameObject);
                     break;
             }
@@ -122,6 +124,8 @@ namespace Assets.Game.Scripts.Customers.Task
             PhotonView senderView = PhotonView.Find(senderPlayerId);
             senderView.RPC("ReceiveOrder", info.sender, order);
 
+            StatusIconLibrary.Get().ShowTaskCompleteTick(currentIcon.transform.position);
+
 
             SwitchState(State.WaitingFood);
         }
@@ -139,6 +143,8 @@ namespace Assets.Game.Scripts.Customers.Task
             }
 
             //TODO: Show happy/sad face and do eating
+            StatusIconLibrary.Get().ShowTaskCompleteTick(currentIcon.transform.position);
+
             photonView.RPC("End", PhotonTargets.All);
         }
 

@@ -53,4 +53,5 @@ MonoBehaviour:
   - AddOrder
   - AddFood
   - GiveFood
+  - _ShowTaskCompleteTick
   DisableAutoOpenWizard: 1

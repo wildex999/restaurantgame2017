@@ -75,6 +75,7 @@ namespace Assets.Game.Scripts
                 food = readyFood.Dequeue();
 
             PhotonView.Find(playerViewId).photonView.RPC("GiveFood", info.sender, food);
+            StatusIconLibrary.Get().ShowTaskCompleteTick(icon.transform.position);
             UpdateReadyIcon();
         }
 

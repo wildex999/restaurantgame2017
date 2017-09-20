@@ -75,6 +75,11 @@ namespace Assets.Game.Scripts
             }
         }
 
+        public GameStatusIcon GetDropIcon()
+        {
+            return icon;
+        }
+
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if(stream.isWriting)

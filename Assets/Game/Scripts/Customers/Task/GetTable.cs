@@ -137,13 +137,15 @@ namespace Assets.Game.Scripts.Customers.Task
             switch (state)
             {
                 case State.WaitForTable:
-                    queue.EnterQueue(group);
+                    if(photonView.isMine)
+                        queue.EnterQueue(group);
                     currentIcon = Instantiate(StatusIconLibrary.Get().iconTable, StatusIconLibrary.Get().mainCanvas.transform);
                     currentIcon.Follow(gameObject);
                     break;
 
                 case State.MoveToTable:
-                    agent.SetDestination(targetTable.transform.position);
+                    if(photonView.isMine)
+                        agent.SetDestination(targetTable.transform.position);
                     break;
             }
         }
@@ -184,6 +186,7 @@ namespace Assets.Game.Scripts.Customers.Task
 
             //Move Customers to their seats
             //TODO: Move each customer sepparate from group
+            StatusIconLibrary.Get().ShowTaskCompleteTick(currentIcon.transform.position);
             SwitchState(State.MoveToTable);
         }
 
