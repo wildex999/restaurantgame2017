@@ -26,9 +26,6 @@ namespace Assets.Game.Scripts.UI
 
         private void Update()
         {
-            if (worldPosition == null)
-                return;
-
             float deltaTime = (float)(Time.time - timeStart);
             float dx = moveSpeed.x * deltaTime;
             float dy = moveSpeed.y * deltaTime;

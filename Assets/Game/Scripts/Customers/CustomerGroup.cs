@@ -1,5 +1,7 @@
 ﻿using Assets.Game.Scripts.Customers.Task;
+using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Assets.Game.Scripts.Customers
 {
@@ -10,35 +12,28 @@ namespace Assets.Game.Scripts.Customers
         [Tooltip("Patience in Percentage. Higher patience means slower Satisfaction loss.")]
         public float patience = 100;
 
+        ActionManager actionManager;
+
         private void Start()
         {
-            StartActionGetTable();
-        }
+            //Non-master clients don't need to move about on their own
+            if(!photonView.isMine)
+                Destroy(GetComponent<NavMeshAgent>());
 
-        public void StartActionGetTable()
-        {
-            if(photonView.isMine)
-                photonView.RPC("ActionGetTable", PhotonTargets.AllBuffered);
-        }
-
-        public void StartActionOrderFood()
-        {
-            if(photonView.isMine)
-                photonView.RPC("ActionOrderFood", PhotonTargets.AllBuffered);
+            actionManager = GetComponent<ActionManager>();
+            ActionGetTable();
         }
 
         [PunRPC]
-        void ActionGetTable()
+        public void ActionGetTable()
         {
-            GetTable action = gameObject.AddComponent<GetTable>();
-            photonView.ObservedComponents.Add(action);
+            actionManager.AddActionSynced(typeof(ActionGetTable));
         }
 
         [PunRPC]
-        void ActionOrderFood()
+        public void ActionOrderFood()
         {
-            OrderFood action = gameObject.AddComponent<OrderFood>();
-            photonView.ObservedComponents.Add(action);
+            actionManager.AddActionSynced(typeof(ActionOrderFood));
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

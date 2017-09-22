@@ -37,7 +37,7 @@ namespace Assets.Game.Scripts.Player.Actions
             if (group == null)
                 return;
 
-            GetTable customerTask = group.GetComponent<GetTable>();
+            ActionGetTable customerTask = group.GetComponent<ActionGetTable>();
             if(customerTask == null || !customerTask.AwaitingTable())
             {
                 OnClose();

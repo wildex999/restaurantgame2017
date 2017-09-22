@@ -22,9 +22,10 @@ GameObject:
   - component: {fileID: 114767226703887188}
   - component: {fileID: 114831847317032618}
   - component: {fileID: 114614405217725320}
+  - component: {fileID: 114547861899462328}
+  - component: {fileID: 114878298589789782}
   - component: {fileID: 195532443024959734}
   - component: {fileID: 54106600981859970}
-  - component: {fileID: 114547861899462328}
   m_Layer: 0
   m_Name: CustomerGroup
   m_TagString: CustomerGroup
@@ -131,7 +132,7 @@ MonoBehaviour:
   m_RotationModel:
     SynchronizeEnabled: 1
     InterpolateOption: 1
-    InterpolateRotateTowardsSpeed: 180
+    InterpolateRotateTowardsSpeed: 360
     InterpolateLerpSpeed: 5
   m_ScaleModel:
     SynchronizeEnabled: 0
@@ -160,6 +161,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 114614405217725320}
   - {fileID: 114831847317032618}
+  - {fileID: 114878298589789782}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -178,6 +180,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waiting: 100
   patience: 100
+--- !u!114 &114878298589789782
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1663774993202908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 174a69c4ab296074f966c0bf61a5bdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!195 &195532443024959734
 NavMeshAgent:
   m_ObjectHideFlags: 1
