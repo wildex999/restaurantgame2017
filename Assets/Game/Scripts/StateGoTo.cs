@@ -23,7 +23,7 @@ namespace Assets.Game.Scripts
         Func<Vector3> destinationFunction;
 
         Vector3 destination;
-        Vector3 prevDestination;
+        Vector3 prevDestination = new Vector3(-1000000, -1000000);
 
         /// <summary>
         /// 

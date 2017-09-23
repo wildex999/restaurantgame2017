@@ -83,7 +83,7 @@ namespace Assets.Game.Scripts
         }
 
         //Sync the current state
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if(stream.isWriting)
             {
@@ -98,7 +98,10 @@ namespace Assets.Game.Scripts
             }
         }
 
-        public abstract bool AllowNewAction(Type action);
-        public abstract void OnNewAction(IAction action);
+        public virtual bool AllowNewAction(Type action)
+        {
+            return false;
+        }
+        public virtual void OnNewAction(IAction action) { }
     }
 }

@@ -54,4 +54,5 @@ MonoBehaviour:
   - AddFood
   - GiveFood
   - _ShowTaskCompleteTick
+  - Pay
   DisableAutoOpenWizard: 1

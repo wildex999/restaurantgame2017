@@ -26,6 +26,9 @@ namespace Assets.Game.Scripts.UI
 
         private void Update()
         {
+            //Set as the top UI element
+            transform.SetAsLastSibling(); 
+
             float deltaTime = (float)(Time.time - timeStart);
             float dx = moveSpeed.x * deltaTime;
             float dy = moveSpeed.y * deltaTime;

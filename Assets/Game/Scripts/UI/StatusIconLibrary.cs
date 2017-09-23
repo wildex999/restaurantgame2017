@@ -14,6 +14,8 @@ namespace Assets.Game.Scripts.UI
         public GameStatusIcon iconFood;
         public GameStatusIcon iconArrow;
         public GameStatusIcon iconFoodReady;
+        public GameStatusIcon iconMoney;
+        public GameStatusIcon iconTrash;
         public GameNotificationIcon iconActionCompleteTick;
 
         //Instances

@@ -59,7 +59,7 @@ namespace Assets.Game.Scripts.Customers.Task
         [PunRPC]
         public void SetTable(int tableId)
         {
-            if (!PhotonNetwork.isMasterClient)
+            if (!photonView.isMine)
                 return;
 
             PhotonView tableObj = PhotonView.Find(tableId);
@@ -92,13 +92,6 @@ namespace Assets.Game.Scripts.Customers.Task
         {
             return currentStateId == stateWaitForTable;
         }
-
-        public override bool AllowNewAction(Type action)
-        {
-            return false;
-        }
-
-        public override void OnNewAction(IAction action) {}
 
         #region States
 
@@ -154,23 +147,26 @@ namespace Assets.Game.Scripts.Customers.Task
         {
             public override void Setup()
             {
-                action.GetComponent<NavMeshAgent>().enabled = false;
-                Vector3 tablePos = action.targetTable.transform.position;
-                action.group.transform.position = new Vector3(tablePos.x, action.group.transform.position.y, tablePos.z);
-                foreach (Chair chair in action.targetTable.GetChairs())
+                if (action.photonView.isMine)
                 {
-                    Customer customer = chair.seatedCustomer;
-                    if (customer == null)
-                        continue;
-                    if (!action.group.HasCustomer(customer))
-                        continue;
+                    action.GetComponent<NavMeshAgent>().enabled = false;
+                    Vector3 tablePos = action.targetTable.transform.position;
+                    action.group.transform.position = new Vector3(tablePos.x, action.group.transform.position.y, tablePos.z);
+                    foreach (Chair chair in action.targetTable.GetChairs())
+                    {
+                        Customer customer = chair.seatedCustomer;
+                        if (customer == null)
+                            continue;
+                        if (!action.group.HasCustomer(customer))
+                            continue;
 
-                    Vector3 chairPos = chair.transform.position;
-                    customer.transform.position = new Vector3(chairPos.x, customer.transform.position.y, chairPos.z);
+                        Vector3 chairPos = chair.transform.position;
+                        customer.transform.position = new Vector3(chairPos.x, customer.transform.position.y, chairPos.z);
+                    }
+
+                    action.End();
+                    action.group.ActionOrderFood();
                 }
-
-                action.End();
-                action.group.ActionOrderFood();
             }
 
             public override void Update() {}

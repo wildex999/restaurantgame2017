@@ -24,20 +24,26 @@ namespace Assets.Game.Scripts
 
         private void UpdateMovement()
         {
+            float mouseX = Input.mousePosition.x;
+            float mouseY = Input.mousePosition.y;
+
+            if (mouseX < 0 || mouseX > Screen.width || mouseY < 0 || mouseY > Screen.height)
+                return;
+
             Vector3 movement = Vector3.zero;
-            if (Input.mousePosition.x > Screen.width - cameraMoveBorder && Input.mousePosition.x <= Screen.width)
+            if (mouseX > Screen.width - cameraMoveBorder && mouseX <= Screen.width)
             {
                 movement.x += moveSpeed * Time.deltaTime;
             }
-            else if (Input.mousePosition.x < cameraMoveBorder && Input.mousePosition.x >= 0)
+            else if (mouseX < cameraMoveBorder && mouseX >= 0)
             {
                 movement.x -= moveSpeed * Time.deltaTime;
             }
-            else if (Input.mousePosition.y > Screen.height - cameraMoveBorder && Input.mousePosition.y < Screen.height)
+            else if (mouseY > Screen.height - cameraMoveBorder && mouseY < Screen.height)
             {
                 movement.z += moveSpeed * Time.deltaTime;
             }
-            else if (Input.mousePosition.y < cameraMoveBorder && Input.mousePosition.y >= 0)
+            else if (mouseY < cameraMoveBorder && mouseY >= 0)
             {
                 movement.z -= moveSpeed * Time.deltaTime;
             }

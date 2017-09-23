@@ -105,6 +105,21 @@ namespace Assets.Game.Scripts
                 action.DeliverTo(group);
         }
 
+        public void TakeMoney(CustomerGroup group)
+        {
+            if (!photonView.isMine)
+                return;
+
+            ActionActOnTarget action = actionManager.AddAction<ActionActOnTarget>();
+            if(action)
+            {
+                action.SetAction((Transform target) => {
+                    group.photonView.RPC("Pay", PhotonTargets.MasterClient);
+                });
+                action.SetTarget(group.transform);
+            }
+        }
+
         public void SetDestination(Vector3 destination)
         {
             agent.isStopped = false;

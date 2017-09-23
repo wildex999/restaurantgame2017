@@ -60,6 +60,10 @@ MonoBehaviour:
     type: 2}
   iconFoodReady: {fileID: 114837318446448704, guid: 18f8fe1d6adbef242a47e4cce26baa79,
     type: 2}
+  iconMoney: {fileID: 114855997402933880, guid: b79f183c364a46a4e8281271bd1ead2b,
+    type: 2}
+  iconTrash: {fileID: 114827918448207782, guid: 09a8379ab8bf37f468638709e769b2a8,
+    type: 2}
   iconActionCompleteTick: {fileID: 114724533441305712, guid: 14074bf5bd425eb42a84e82b6ba630c9,
     type: 2}
   TableSelectionUi: {fileID: 0}

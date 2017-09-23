@@ -39,6 +39,11 @@ namespace Assets.Game.Scripts
             return comp;
         }
 
+        public T AddActionSynced<T>() where T : Component
+        {
+            return (T)AddAction(typeof(T));
+        }
+
         /// <summary>
         /// Add an action to the GameObject, but do not add it to any current or future clients.
         /// This also not added to the list of observed objects.

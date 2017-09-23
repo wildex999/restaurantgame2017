@@ -74,10 +74,11 @@ namespace Assets.Game.Scripts.Customers.Task
                 return;
             }
 
-            //TODO: Show happy/sad face and do eating
+            //TODO: Show happy/sad face
             StatusIconLibrary.Get().ShowTaskCompleteTick(currentIcon.transform.position);
-
             End();
+
+            group.ActionEatFood();
         }
 
         private void OnMouseUpAsButton()
@@ -92,13 +93,6 @@ namespace Assets.Game.Scripts.Customers.Task
                 GameManager.instance.localPlayer.DeliverFood(group);
             }
         }
-
-        public override bool AllowNewAction(Type action)
-        {
-            return false;
-        }
-
-        public override void OnNewAction(IAction action) { }
 
         #region States
 

@@ -30,16 +30,19 @@ namespace Assets.Game.Scripts.Customers
             ActionGetTable();
         }
 
-        [PunRPC]
         public void ActionGetTable()
         {
-            actionManager.AddActionSynced(typeof(ActionGetTable));
+            actionManager.AddActionSynced<ActionGetTable>();
         }
 
-        [PunRPC]
         public void ActionOrderFood()
         {
-            actionManager.AddActionSynced(typeof(ActionOrderFood));
+            actionManager.AddActionSynced<ActionOrderFood>();
+        }
+
+        public void ActionEatFood()
+        {
+            actionManager.AddActionSynced<ActionEatFood>();
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -78,9 +81,9 @@ namespace Assets.Game.Scripts.Customers
             if (agent == null)
                 return;
 
-            agent.isStopped = false;
             if(destination != prevDestination)
                 agent.SetDestination(destination);
+            agent.isStopped = false;
             prevDestination = destination;
         }
 
