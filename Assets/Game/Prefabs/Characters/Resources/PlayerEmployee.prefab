@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114126023455148032}
   - component: {fileID: 114521032072082552}
   - component: {fileID: 114209006083162156}
+  - component: {fileID: 114827134084424580}
   m_Layer: 0
   m_Name: PlayerEmployee
   m_TagString: Untagged
@@ -132,6 +133,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   rotationSpeed: 16
+  actionDistance: 1
   allowUserInput: 1
 --- !u!114 &114209006083162156
 MonoBehaviour:
@@ -224,6 +226,17 @@ MonoBehaviour:
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
+--- !u!114 &114827134084424580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1165149932100814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 174a69c4ab296074f966c0bf61a5bdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!195 &195394176667989092
 NavMeshAgent:
   m_ObjectHideFlags: 1

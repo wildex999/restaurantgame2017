@@ -10,5 +10,9 @@ namespace Assets
     {
         void OnAdd(ActionManager manager);
         void OnRemove();
+        void SwitchState(int stateId);
+
+        bool AllowNewAction(Type action);
+        void OnNewAction(IAction action);
     }
 }

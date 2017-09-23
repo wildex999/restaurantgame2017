@@ -17,7 +17,6 @@ namespace Assets.Game.Scripts.UI.TableSelect
 
         TableSelection tableSelectionUi;
         List<GameObject> chairs;
-        GameObject table;
 
         bool hover = false;
 

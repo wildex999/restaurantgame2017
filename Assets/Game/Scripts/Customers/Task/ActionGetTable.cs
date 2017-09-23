@@ -3,6 +3,7 @@ using Assets.Game.Scripts.UI;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 namespace Assets.Game.Scripts.Customers.Task
 {
@@ -17,24 +18,31 @@ namespace Assets.Game.Scripts.Customers.Task
     {
         CustomerGroup group;
         CustomerQueue queue;
-        NavMeshAgent agent;
         TableGroup targetTable;
 
         GameStatusIcon currentIcon;
 
         int stateWalkToDoor;
         int stateWaitForTable;
-        int stateMoveToTable;
+        int stateWalkToTable;
+        int stateSeatTable;
+
+        StateGoTo<CustomerGroup> goToTable;
 
         private void Start()
         {
-            agent = GetComponent<NavMeshAgent>();
             queue = FindObjectOfType<CustomerQueue>();
             group = GetComponent<CustomerGroup>();
 
-            stateWalkToDoor = AddState(new StateWalkToDoor());
             stateWaitForTable = AddState(new StateWaitForTable());
-            stateMoveToTable = AddState(new StateMoveToTable());
+            stateSeatTable = AddState(new StateSeatTable());
+
+            StateGoTo<CustomerGroup> goToDoor = new StateGoTo<CustomerGroup>(group, this, 1f, stateWaitForTable);
+            goToDoor.SetDestination(() => { return queue.NextQueuePosition(); });
+            stateWalkToDoor = AddState(goToDoor);
+
+            goToTable = new StateGoTo<CustomerGroup>(group, this, 1f, stateSeatTable);
+            stateWalkToTable = AddState(goToTable);
 
             SwitchState(stateWalkToDoor);
         }
@@ -76,13 +84,8 @@ namespace Assets.Game.Scripts.Customers.Task
             //Move Customers to their seats
             //TODO: Move each customer sepparate from group
             StatusIconLibrary.Get().ShowTaskCompleteTick(currentIcon.transform.position);
-            SwitchState(stateMoveToTable);
-        }
-
-        public void End()
-        {
-            SwitchState(stateNone);
-            manager.RemoveActionSynced(this.GetType());
+            goToTable.SetDestination(targetTable.transform.position);
+            SwitchState(stateWalkToTable);
         }
 
         public bool AwaitingTable()
@@ -90,32 +93,14 @@ namespace Assets.Game.Scripts.Customers.Task
             return currentStateId == stateWaitForTable;
         }
 
-        #region States
-
-        /// <summary>
-        /// Move towards the queue at the door.
-        /// </summary>
-        private class StateWalkToDoor : ActionState<ActionGetTable>
+        public override bool AllowNewAction(Type action)
         {
-            public override void Setup() {}
-            public override void Cleanup() { }
-
-            public override void Update()
-            {
-                //Master client
-                if (action.photonView.isMine)
-                {
-                    Vector3 point = action.queue.NextQueuePosition();
-
-                    if (action.agent.destination != point)
-                        action.agent.SetDestination(point);
-
-                    //Enter queue if near
-                    if (Vector3.Distance(action.transform.position, point) < 2f)
-                        action.SwitchState(action.stateWaitForTable);
-                }
-            }
+            return false;
         }
+
+        public override void OnNewAction(IAction action) {}
+
+        #region States
 
         /// <summary>
         /// Join the queue and wait to be given a table.
@@ -138,8 +123,8 @@ namespace Assets.Game.Scripts.Customers.Task
                 {
                     //Move along the queue
                     Vector3 point = action.queue.GetQueuePosition(action.group);
-                    if (action.agent.destination != point)
-                        action.agent.SetDestination(point);
+                    if (action.group.GetDestination() != point)
+                        action.group.SetDestination(point);
 
                     //Wait
                     action.group.waiting -= (100f / action.group.patience) * Time.deltaTime;
@@ -163,46 +148,33 @@ namespace Assets.Game.Scripts.Customers.Task
         }
 
         /// <summary>
-        /// Move towards the given table, and sit down when close enough
+        /// Seat the customers at the table
         /// </summary>
-        private class StateMoveToTable : ActionState<ActionGetTable>
+        private class StateSeatTable : ActionState<ActionGetTable>
         {
-            public override void Setup() {
-                if (action.photonView.isMine)
-                    action.agent.SetDestination(action.targetTable.transform.position);
-            }
-
-            public override void Update()
+            public override void Setup()
             {
-                if (action.photonView.isMine)
+                action.GetComponent<NavMeshAgent>().enabled = false;
+                Vector3 tablePos = action.targetTable.transform.position;
+                action.group.transform.position = new Vector3(tablePos.x, action.group.transform.position.y, tablePos.z);
+                foreach (Chair chair in action.targetTable.GetChairs())
                 {
-                    //Sit if close to the table
-                    if (Vector3.Distance(action.transform.position, action.targetTable.transform.position) < 1f)
-                    {
-                        action.GetComponent<NavMeshAgent>().enabled = false;
-                        Vector3 tablePos = action.targetTable.transform.position;
-                        action.group.transform.position = new Vector3(tablePos.x, action.group.transform.position.y, tablePos.z);
-                        foreach (Chair chair in action.targetTable.GetChairs())
-                        {
-                            Customer customer = chair.seatedCustomer;
-                            if (customer == null)
-                                continue;
-                            if (!action.group.HasCustomer(customer))
-                                continue;
+                    Customer customer = chair.seatedCustomer;
+                    if (customer == null)
+                        continue;
+                    if (!action.group.HasCustomer(customer))
+                        continue;
 
-                            Vector3 chairPos = chair.transform.position;
-                            customer.transform.position = new Vector3(chairPos.x, customer.transform.position.y, chairPos.z);
-                        }
-
-                        action.End();
-                        action.group.ActionOrderFood();
-                    }
+                    Vector3 chairPos = chair.transform.position;
+                    customer.transform.position = new Vector3(chairPos.x, customer.transform.position.y, chairPos.z);
                 }
+
+                action.End();
+                action.group.ActionOrderFood();
             }
 
+            public override void Update() {}
             public override void Cleanup() {}
-
-
         }
 
         #endregion

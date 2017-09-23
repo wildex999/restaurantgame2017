@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 namespace Assets.Game.Scripts
 {
-    public class PlayerController : Photon.PunBehaviour
+    public class PlayerController : Photon.PunBehaviour, ICanSetDestination
     {
         [Tooltip("The layer which is used for raycasting the movement position")]
         public LayerMask movementLayer;
@@ -19,10 +19,13 @@ namespace Assets.Game.Scripts
 
 
         NavMeshAgent agent;
+        ActionManager actionManager;
+        Vector3 prevDestination;
 
         void Start()
         {
             agent = GetComponent<NavMeshAgent>();
+            actionManager = GetComponent<ActionManager>();
         }
 
         private void Update()
@@ -45,12 +48,16 @@ namespace Assets.Game.Scripts
             {
                 if (Input.GetButtonDown("Fire2"))
                 {
-                    //Remove any current actions (TODO: Write a more generic system for this)
-                    Destroy(GetComponent<SeatCustomers>());
-
                     RaycastHit hit;
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, movementLayer))
-                        SetDestination(hit.point);
+                    {
+                        //A new Move always overrides an existing
+                        actionManager.RemoveAction<ActionMove>();
+
+                        ActionMove move = actionManager.AddAction<ActionMove>();
+                        if (move != null)
+                            move.SetDestination(hit.point);
+                    }
                 }
             }
         }
@@ -60,46 +67,32 @@ namespace Assets.Game.Scripts
             if (!photonView.isMine)
                 return;
 
-            if (!gameObject.GetComponent<SeatCustomers>())
+            ActionSeatCustomers action = actionManager.AddAction<ActionSeatCustomers>();
+            if (action != null)
             {
-                SeatCustomers task = gameObject.AddComponent<SeatCustomers>();
-                task.SetCustomerGroup(group);
+                action.SetCustomerGroup(group);
             }
-
         }
 
         public void TakeOrder(CustomerGroup group)
         {
-            if (!photonView.isMine)
-                return;
-
-            if(!gameObject.GetComponent<TakeOrder>())
-            {
-                TakeOrder task = gameObject.AddComponent<TakeOrder>();
-                task.SetCustomerGroup(group);
-            }
+            ActionTakeOrder action = actionManager.AddAction<ActionTakeOrder>();
+            if(action)
+                action.SetCustomerGroup(group);
         }
 
         public void DeliverOrder(Orders orders)
         {
-            if (!photonView.isMine)
-                return;
-
-            TakeOrder task = gameObject.GetComponent<TakeOrder>();
-            if (task)
-                task.DeliverOrder(orders);
+            ActionTakeOrder action = GetComponent<ActionTakeOrder>();
+            if (action)
+                action.DeliverOrder(orders);
         }
 
         public void GetFood(FoodDesk foodDesk)
         {
-            if (!photonView.isMine)
-                return;
-
-            if (!GetComponent<DeliverFood>())
-            {
-                DeliverFood task = gameObject.AddComponent<DeliverFood>();
-                task.foodDesk = foodDesk;
-            }
+            ActionDeliverFood action = actionManager.AddAction<ActionDeliverFood>();
+            if(action)
+                action.foodDesk = foodDesk;
         }
 
         public void DeliverFood(CustomerGroup group)
@@ -107,19 +100,29 @@ namespace Assets.Game.Scripts
             if (!photonView.isMine)
                 return;
 
-            DeliverFood task = gameObject.GetComponent<DeliverFood>();
-            if (task)
-                task.DeliverTo(group);
+            ActionDeliverFood action = gameObject.GetComponent<ActionDeliverFood>();
+            if (action)
+                action.DeliverTo(group);
         }
 
         public void SetDestination(Vector3 destination)
         {
+            agent.isStopped = false;
+            if (destination == prevDestination)
+                return;
+
             agent.SetDestination(destination);
+            prevDestination = destination;
         }
 
-        public void StopMoving()
+        public Vector3 GetDestination()
         {
-            agent.destination = transform.position;
+            return prevDestination;
+        }
+
+        public void ClearDestination()
+        {
+            agent.isStopped = true;
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 namespace Assets.Game.Scripts.Customers
 {
-    public class CustomerGroup : Photon.PunBehaviour, IPunObservable
+    public class CustomerGroup : Photon.PunBehaviour, IPunObservable, ICanSetDestination
     {
         [Tooltip("How long they will wait before becoming dissatisfied, as a percentage.")]
         public float waiting = 100; //TODO: Find a better name for this variable
@@ -13,12 +13,18 @@ namespace Assets.Game.Scripts.Customers
         public float patience = 100;
 
         ActionManager actionManager;
+        NavMeshAgent agent;
+        Vector3 prevDestination;
 
         private void Start()
         {
+            agent = GetComponent<NavMeshAgent>();
             //Non-master clients don't need to move about on their own
-            if(!photonView.isMine)
-                Destroy(GetComponent<NavMeshAgent>());
+            if (!photonView.isMine)
+            {
+                Destroy(agent);
+                agent = null;
+            }
 
             actionManager = GetComponent<ActionManager>();
             ActionGetTable();
@@ -65,6 +71,30 @@ namespace Assets.Game.Scripts.Customers
                 if(c == customer)
                     return true;
             return false;
+        }
+
+        public void SetDestination(Vector3 destination)
+        {
+            if (agent == null)
+                return;
+
+            agent.isStopped = false;
+            if(destination != prevDestination)
+                agent.SetDestination(destination);
+            prevDestination = destination;
+        }
+
+        public Vector3 GetDestination()
+        {
+            return prevDestination;
+        }
+
+        public void ClearDestination()
+        {
+            if (agent == null)
+                return;
+
+            agent.isStopped = true;
         }
     }
 }

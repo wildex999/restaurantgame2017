@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.Game.Scripts
 {
     public abstract class SyncedAction<T> : Photon.PunBehaviour, IPunObservable, IAction
     {
         public ActionManager manager;
+        public bool sync = true;
 
         List<IActionState> states;
 
         IActionState currentState;
         protected int currentStateId;
 
-        protected int stateNone = -1;
+        protected int stateNone = -1; //Special state doing nothing. This is the state which is set before removing(To allow cleanup of any existing state)
+        protected int stateEnd = -2; //Special state which will End the action.
 
         public SyncedAction()
         {
@@ -19,12 +22,14 @@ namespace Assets.Game.Scripts
             currentStateId = stateNone;
         }
 
-        public void OnAdd(ActionManager manager)
+        public virtual void OnAdd(ActionManager manager)
         {
             this.manager = manager;
         }
 
-        public void OnRemove() { }
+        public virtual void OnRemove() {
+            SwitchState(stateNone);
+        }
 
         protected virtual void Update()
         {
@@ -41,8 +46,14 @@ namespace Assets.Game.Scripts
             return id;
         }
 
-        protected void SwitchState(int id)
+        public void SwitchState(int id)
         {
+            if(id == stateEnd)
+            {
+                End();
+                return;
+            }
+
             IActionState newState = null;
             if(id >= 0 && id < states.Count)
                 newState = states[id];
@@ -63,6 +74,14 @@ namespace Assets.Game.Scripts
             }
         }
 
+        /// <summary>
+        /// End this action, removing it through the manager.
+        /// </summary>
+        public virtual void End()
+        {
+            manager.RemoveAction(this);
+        }
+
         //Sync the current state
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -78,5 +97,8 @@ namespace Assets.Game.Scripts
                 SwitchState(id);
             }
         }
+
+        public abstract bool AllowNewAction(Type action);
+        public abstract void OnNewAction(IAction action);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Assets.Game.Scripts.UI;
+using System;
 using UnityEngine;
 
 namespace Assets.Game.Scripts.Customers.Task
@@ -79,12 +80,6 @@ namespace Assets.Game.Scripts.Customers.Task
             End();
         }
 
-        private void End()
-        {
-            SwitchState(stateNone);
-            manager.RemoveActionSynced(this.GetType());
-        }
-
         private void OnMouseUpAsButton()
         {
             if (currentStateId == stateWaitingOrder)
@@ -97,6 +92,13 @@ namespace Assets.Game.Scripts.Customers.Task
                 GameManager.instance.localPlayer.DeliverFood(group);
             }
         }
+
+        public override bool AllowNewAction(Type action)
+        {
+            return false;
+        }
+
+        public override void OnNewAction(IAction action) { }
 
         #region States
 
@@ -112,7 +114,7 @@ namespace Assets.Game.Scripts.Customers.Task
             {
                 if (action.photonView.isMine)
                 {
-                    if (Random.Range(0f, 1f) < action.menuReadingSpeed)
+                    if (UnityEngine.Random.Range(0f, 1f) < action.menuReadingSpeed)
                     {
                         action.SwitchState(action.stateWaitingOrder);
                         return;
@@ -163,8 +165,13 @@ namespace Assets.Game.Scripts.Customers.Task
 
             public override void Update()
             {
-                if(action.photonView.isMine)
+                //Master
+                if (action.photonView.isMine)
                     action.group.waiting -= (100f / action.group.patience) * Time.deltaTime;
+
+                //Common
+                //Update Icon to indicate waiting time
+                action.currentIcon.SetFade(1f - (action.group.waiting / 100f));
             }
 
             public override void Cleanup()
