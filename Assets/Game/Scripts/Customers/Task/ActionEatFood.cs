@@ -1,4 +1,5 @@
-﻿using Assets.Game.Scripts.UI;
+﻿using Assets.Game.Scripts.Tables;
+using Assets.Game.Scripts.UI;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,7 +13,7 @@ namespace Assets.Game.Scripts.Customers.Task
     /// </summary>
     public class ActionEatFood : SyncedAction<ActionEatFood>
     {
-        public float eatTime = 15f;
+        public float eatTime = 1f;
 
         CustomerGroup group;
         GameStatusIcon icon;
@@ -44,7 +45,7 @@ namespace Assets.Game.Scripts.Customers.Task
                 return;
 
             //Task Employee with getting payment from the customers
-            GameManager.instance.localPlayer.TakeMoney(group);
+            GameManager.instance.localPlayer.ActionTakeMoney(group);
         }
 
         [PunRPC]
@@ -59,6 +60,12 @@ namespace Assets.Game.Scripts.Customers.Task
             //Since we disabled the agent when seated, we need to re-enable it.
             GetComponent<NavMeshAgent>().enabled = true;
 
+            //Mark the table as needing a cleanup
+            if (group.Table)
+                group.Table.GetTable().MarkTableDirty();
+            group.Table = null;
+
+            //Leave the Restaurant
             goToExit.SetDestination(GameObject.Find("CustomerExit").transform.position);
             SwitchState(stateLeave);
         }

@@ -53,7 +53,7 @@ namespace Assets.Game.Scripts.Customers.Task
                 return;
 
             //Task Employee with seating the customers
-            GameManager.instance.localPlayer.SeatCustomerGroup(group);
+            GameManager.instance.localPlayer.ActionSeatCustomerGroup(group);
         }
 
         [PunRPC]
@@ -163,6 +163,7 @@ namespace Assets.Game.Scripts.Customers.Task
                         Vector3 chairPos = chair.transform.position;
                         customer.transform.position = new Vector3(chairPos.x, customer.transform.position.y, chairPos.z);
                     }
+                    action.group.Table = action.targetTable;
 
                     action.End();
                     action.group.ActionOrderFood();

@@ -1,5 +1,6 @@
 ﻿using Assets.Game.Scripts.Customers;
 using Assets.Game.Scripts.Player.Actions;
+using Assets.Game.Scripts.Tables;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -62,11 +63,8 @@ namespace Assets.Game.Scripts
             }
         }
 
-        public void SeatCustomerGroup(CustomerGroup group)
+        public void ActionSeatCustomerGroup(CustomerGroup group)
         {
-            if (!photonView.isMine)
-                return;
-
             ActionSeatCustomers action = actionManager.AddAction<ActionSeatCustomers>();
             if (action != null)
             {
@@ -74,7 +72,7 @@ namespace Assets.Game.Scripts
             }
         }
 
-        public void TakeOrder(CustomerGroup group)
+        public void ActionTakeOrder(CustomerGroup group)
         {
             ActionTakeOrder action = actionManager.AddAction<ActionTakeOrder>();
             if(action)
@@ -88,7 +86,7 @@ namespace Assets.Game.Scripts
                 action.DeliverOrder(orders);
         }
 
-        public void GetFood(FoodDesk foodDesk)
+        public void ActionGetFood(FoodDesk foodDesk)
         {
             ActionDeliverFood action = actionManager.AddAction<ActionDeliverFood>();
             if(action)
@@ -105,11 +103,8 @@ namespace Assets.Game.Scripts
                 action.DeliverTo(group);
         }
 
-        public void TakeMoney(CustomerGroup group)
+        public void ActionTakeMoney(CustomerGroup group)
         {
-            if (!photonView.isMine)
-                return;
-
             ActionActOnTarget action = actionManager.AddAction<ActionActOnTarget>();
             if(action)
             {
@@ -118,6 +113,13 @@ namespace Assets.Game.Scripts
                 });
                 action.SetTarget(group.transform);
             }
+        }
+
+        public void ActionCleanTrash(Table table)
+        {
+            ActionCleanTrash action = actionManager.AddAction<ActionCleanTrash>();
+            if(action)
+                action.table = table;
         }
 
         public void SetDestination(Vector3 destination)

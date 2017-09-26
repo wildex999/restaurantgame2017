@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Assets.Game.Scripts.Tables
 {
@@ -11,6 +10,11 @@ namespace Assets.Game.Scripts.Tables
         {
             chairs = new List<Chair>();
             chairs.AddRange(GetComponentsInChildren<Chair>());
+        }
+
+        public Table GetTable()
+        {
+            return GetComponentInChildren<Table>();
         }
 
         public List<Chair> GetChairs()

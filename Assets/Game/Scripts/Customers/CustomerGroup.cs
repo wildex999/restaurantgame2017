@@ -1,4 +1,5 @@
 ﻿using Assets.Game.Scripts.Customers.Task;
+using Assets.Game.Scripts.Tables;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,6 +16,7 @@ namespace Assets.Game.Scripts.Customers
         ActionManager actionManager;
         NavMeshAgent agent;
         Vector3 prevDestination;
+        TableGroup table;
 
         private void Start()
         {
@@ -74,6 +76,21 @@ namespace Assets.Game.Scripts.Customers
                 if(c == customer)
                     return true;
             return false;
+        }
+
+        /// <summary>
+        /// The table the customers are currently seated at, or null if not seated.
+        /// </summary>
+        public TableGroup Table
+        {
+            get
+            {
+                return table;
+            }
+            set
+            {
+                table = value;
+            }
         }
 
         public void SetDestination(Vector3 destination)

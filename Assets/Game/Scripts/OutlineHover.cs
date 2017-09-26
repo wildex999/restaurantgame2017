@@ -30,6 +30,11 @@ namespace Assets.Game.Scripts
             RemoveOutlines();
         }
 
+        private void OnDestroy()
+        {
+            RemoveOutlines();
+        }
+
         private void AddOutlines()
         {
             if (hasOutline)

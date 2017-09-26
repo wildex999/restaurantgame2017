@@ -55,4 +55,6 @@ MonoBehaviour:
   - GiveFood
   - _ShowTaskCompleteTick
   - Pay
+  - CleanTrash
+  - GetTrash
   DisableAutoOpenWizard: 1

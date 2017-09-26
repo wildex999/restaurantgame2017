@@ -29,7 +29,7 @@ namespace Assets.Game.Scripts
                 return;
 
             //Task Employee with getting food
-            GameManager.instance.localPlayer.GetFood(this);
+            GameManager.instance.localPlayer.ActionGetFood(this);
         }
 
         /// <summary>

@@ -10,8 +10,8 @@ namespace Assets.Game.Scripts.Customers
         [Tooltip("List of Customer prefabs which will be randomly choosen to spawn in a group")]
         public List<Customer> customerPrefabs;
 
-        [Tooltip("The percentage chance of a Customer group to spawn every tick. A number between 0 and 100.")]
-        public float spawnChance;
+        //[Tooltip("The percentage chance of a Customer group to spawn every tick. A number between 0 and 100.")]
+        //public float spawnChance;
         [Tooltip("Max number of customer groups after which it will stop spawning more.")]
         public int maxGroups = 10;
 
@@ -30,7 +30,9 @@ namespace Assets.Game.Scripts.Customers
             //Only the Master Client will control the spawning
             if (PhotonNetwork.isMasterClient)
             {
-                if (GameObject.FindGameObjectsWithTag("CustomerGroup").Length < maxGroups && Random.Range(0f, 100f) < spawnChance)
+                //TODO: Make spawn independent of framerate
+                int customersCount = GameObject.FindGameObjectsWithTag("CustomerGroup").Length;
+                if (customersCount < maxGroups && Random.Range(0f, 100f) < 100f/(1 + (customersCount*200)))
                 {
                     SpawnCustomers();
                 }

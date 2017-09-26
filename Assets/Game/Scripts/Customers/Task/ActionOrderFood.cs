@@ -86,7 +86,7 @@ namespace Assets.Game.Scripts.Customers.Task
             if (currentStateId == stateWaitingOrder)
             {
                 //Task Employee with taking their order
-                GameManager.instance.localPlayer.TakeOrder(group);
+                GameManager.instance.localPlayer.ActionTakeOrder(group);
             }
             else if (currentStateId == stateWaitingFood)
             {
@@ -152,6 +152,9 @@ namespace Assets.Game.Scripts.Customers.Task
         {
             public override void Setup()
             {
+                if (action.photonView.isMine)
+                    action.group.waiting = 100;
+
                 action.currentIcon = Instantiate(StatusIconLibrary.Get().iconFood, StatusIconLibrary.Get().mainCanvas.transform);
                 action.currentIcon.StopOverlap = true;
                 action.currentIcon.Follow(action.gameObject);
