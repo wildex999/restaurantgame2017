@@ -9,6 +9,7 @@ namespace Assets.Game.Scripts
     {
         public string name;
         public CustomerGroup customer;
+        public float timeToCreate; //TODO: Temp value until we have a chef
 
         public Order(string name, CustomerGroup customer)
         {

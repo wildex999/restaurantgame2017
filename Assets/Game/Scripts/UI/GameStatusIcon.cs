@@ -11,6 +11,7 @@ namespace Assets.Game.Scripts.UI
         [HideInInspector]
         public FadeBetweenImages imageFade;
 
+        Patience patience;
         EventTrigger trigger;
 
         public bool StopOverlap
@@ -38,6 +39,18 @@ namespace Assets.Game.Scripts.UI
             AddUIEvent(EventTriggerType.PointerEnter, (ev) => OnHoverStart());
             AddUIEvent(EventTriggerType.PointerExit, (ev) => OnHoverEnd());
             AddUIEvent(EventTriggerType.PointerClick, (ev) => OnClick());
+        }
+
+        private void Update()
+        {
+            if (!patience)
+            {
+                SetFade(0);
+                return;
+            }
+
+            //Update Icon to indicate waiting time
+            SetFade(1f - (patience.Remaining / patience.Initial));
         }
 
         private void AddUIEvent(EventTriggerType type, UnityAction<BaseEventData> handler)
@@ -113,6 +126,15 @@ namespace Assets.Game.Scripts.UI
                 return;
 
             follow.SetTarget(obj);
+        }
+
+        /// <summary>
+        /// Set Patience object which will be tracked to fade the icon
+        /// </summary>
+        /// <param name="patience"></param>
+        public void SetPatience(Patience patience)
+        {
+            this.patience = patience;
         }
 
         /// <summary>

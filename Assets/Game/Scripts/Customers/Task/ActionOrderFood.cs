@@ -1,4 +1,5 @@
-﻿using Assets.Game.Scripts.UI;
+﻿using Assets.Game.Scripts.DataClasses;
+using Assets.Game.Scripts.UI;
 using System;
 using UnityEngine;
 
@@ -126,24 +127,21 @@ namespace Assets.Game.Scripts.Customers.Task
         {
             public override void Setup()
             {
+                Data.IntRange waitRange = PatienceData.Instance.waitTakeOrder;
+                action.group.Patience.Run(UnityEngine.Random.Range(waitRange.min, waitRange.max));
+
                 action.currentIcon = Instantiate(StatusIconLibrary.Get().iconMenu, StatusIconLibrary.Get().mainCanvas.transform);
                 action.currentIcon.StopOverlap = true;
                 action.currentIcon.Follow(action.gameObject);
+                action.currentIcon.SetPatience(action.group.Patience);
             }
 
             public override void Update()
-            {
-                //Master
-                if(action.photonView.isMine)
-                    action.group.waiting -= (100f / action.group.patience) * Time.deltaTime;
-
-                //Common
-                //Update Icon to indicate waiting time
-                action.currentIcon.SetFade(1f - (action.group.waiting / 100f));
-            }
+            {}
 
             public override void Cleanup()
             {
+                action.group.Patience.Stop();
                 Destroy(action.currentIcon.gameObject);
             }
         }
@@ -152,27 +150,21 @@ namespace Assets.Game.Scripts.Customers.Task
         {
             public override void Setup()
             {
-                if (action.photonView.isMine)
-                    action.group.waiting = 100;
+                Data.IntRange waitRange = PatienceData.Instance.waitForFood;
+                action.group.Patience.Run(UnityEngine.Random.Range(waitRange.min, waitRange.max));
 
                 action.currentIcon = Instantiate(StatusIconLibrary.Get().iconFood, StatusIconLibrary.Get().mainCanvas.transform);
                 action.currentIcon.StopOverlap = true;
                 action.currentIcon.Follow(action.gameObject);
+                action.currentIcon.SetPatience(action.group.Patience);
             }
 
             public override void Update()
-            {
-                //Master
-                if (action.photonView.isMine)
-                    action.group.waiting -= (100f / action.group.patience) * Time.deltaTime;
-
-                //Common
-                //Update Icon to indicate waiting time
-                action.currentIcon.SetFade(1f - (action.group.waiting / 100f));
-            }
+            {}
 
             public override void Cleanup()
             {
+                action.group.Patience.Stop();
                 Destroy(action.currentIcon.gameObject);
             }
         }

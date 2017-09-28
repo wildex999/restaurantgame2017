@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114878298589789782}
   - component: {fileID: 54106600981859970}
   - component: {fileID: 114800587631886314}
+  - component: {fileID: 114270972439312370}
   m_Layer: 0
   m_Name: CustomerGroup
   m_TagString: CustomerGroup
@@ -61,6 +62,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114270972439312370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1663774993202908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05fcf825191ca814f9c0659b1c3f8d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114547861899462328
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -162,6 +174,7 @@ MonoBehaviour:
   - {fileID: 114614405217725320}
   - {fileID: 114831847317032618}
   - {fileID: 114878298589789782}
+  - {fileID: 114270972439312370}
   ObservedComponentsFoldoutOpen: 1
   viewIdField: 0
   instantiationId: -1
@@ -180,6 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 16
   moveSpeed: 3.5
+  currentCorner: 0
 --- !u!114 &114831847317032618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,3 +218,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 174a69c4ab296074f966c0bf61a5bdf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncedActions: []

@@ -1,4 +1,5 @@
-﻿using Assets.Game.Scripts.Tables;
+﻿using Assets.Game.Scripts.DataClasses;
+using Assets.Game.Scripts.Tables;
 using Assets.Game.Scripts.UI;
 using System;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Assets.Game.Scripts.Customers.Task
     /// </summary>
     public class ActionEatFood : SyncedAction<ActionEatFood>
     {
-        public float eatTime = 1f;
+        public float eatTime;
 
         CustomerGroup group;
         GameStatusIcon icon;
@@ -74,7 +75,10 @@ namespace Assets.Game.Scripts.Customers.Task
         /// </summary>
         private class StateEat : ActionState<ActionEatFood>
         {
-            public override void Setup() {}
+            public override void Setup() {
+                Data.IntRange timeRange = TimingData.Instance.timeToEat;
+                action.eatTime = UnityEngine.Random.Range(timeRange.min, timeRange.max);
+            }
 
             public override void Update()
             {
@@ -97,26 +101,25 @@ namespace Assets.Game.Scripts.Customers.Task
             public override void Setup()
             {
                 if (action.photonView.isMine)
-                    action.group.waiting = 100;
+                {
+                    Data.IntRange waitRange = PatienceData.Instance.waitPayBill;
+                    action.group.Patience.Run(UnityEngine.Random.Range(waitRange.min, waitRange.max));
+                }
 
                 action.icon = Instantiate(StatusIconLibrary.Get().iconMoney, StatusIconLibrary.Get().mainCanvas.transform);
                 action.icon.StopOverlap = true;
                 action.icon.Follow(action.gameObject);
+                action.icon.SetPatience(action.group.Patience);
             }
 
             public override void Update()
-            {
-                //Master
-                if (action.photonView.isMine)
-                    action.group.waiting -= (100f / action.group.patience) * Time.deltaTime;
-
-                //Common
-                //Update Icon to indicate waiting time
-                action.icon.SetFade(1f - (action.group.waiting / 100f));
-            }
+            {}
 
             public override void Cleanup()
             {
+                if (action.photonView.isMine)
+                    action.group.Patience.Stop();
+
                 Destroy(action.icon.gameObject);
             }
         }

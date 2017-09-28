@@ -8,13 +8,9 @@ namespace Assets.Game.Scripts.Customers
 {
     public class CustomerGroup : Photon.PunBehaviour, IPunObservable, ICanSetDestination
     {
-        [Tooltip("How long they will wait before becoming dissatisfied, as a percentage.")]
-        public float waiting = 100; //TODO: Find a better name for this variable
-        [Tooltip("Patience in Percentage. Higher patience means slower Satisfaction loss.")]
-        public float patience = 100;
-
         ActionManager actionManager;
         TableGroup table;
+        public Patience Patience { get; set; }
 
         Vector3 currentDestination;
         bool isMoving = false;
@@ -22,6 +18,7 @@ namespace Assets.Game.Scripts.Customers
         private void Start()
         {
             actionManager = GetComponent<ActionManager>();
+            Patience = GetComponent<Patience>();
             ActionGetTable();
         }
 
@@ -84,15 +81,6 @@ namespace Assets.Game.Scripts.Customers
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            if(stream.isWriting)
-            {
-                stream.SendNext(waiting);
-                stream.SendNext(patience);
-            } else
-            {
-                waiting = (float)stream.ReceiveNext();
-                patience = (float)stream.ReceiveNext();
-            }
         }
 
         public int GetCustomerCount()

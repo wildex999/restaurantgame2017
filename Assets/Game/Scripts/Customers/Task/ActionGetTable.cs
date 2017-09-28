@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Assets.Game.Scripts.DataClasses;
 
 namespace Assets.Game.Scripts.Customers.Task
 {
@@ -104,10 +105,16 @@ namespace Assets.Game.Scripts.Customers.Task
             public override void Setup() {
                 //Enter the queue
                 if (action.photonView.isMine)
+                {
                     action.queue.EnterQueue(action.group);
+
+                    Data.IntRange waitRange = PatienceData.Instance.waitForTable;
+                    action.group.Patience.Run(UnityEngine.Random.Range(waitRange.min, waitRange.max));
+                }
 
                 action.currentIcon = Instantiate(StatusIconLibrary.Get().iconTable, StatusIconLibrary.Get().mainCanvas.transform);
                 action.currentIcon.Follow(action.gameObject);
+                action.currentIcon.SetPatience(action.group.Patience);
             }
 
             public override void Update()
@@ -119,21 +126,14 @@ namespace Assets.Game.Scripts.Customers.Task
                     Vector3 point = action.queue.GetQueuePosition(action.group);
                     if (action.group.GetDestination() != point)
                         action.group.SetDestination(point);
-
-                    //Wait
-                    action.group.waiting -= (100f / action.group.patience) * Time.deltaTime;
                 }
-
-                //Common
-                //Update Icon to indicate waiting time
-                action.currentIcon.SetFade(1f - (action.group.waiting / 100f));
             }
 
             public override void Cleanup() {
                 if (action.photonView.isMine)
                 {
                     action.queue.LeaveQueue(action.group);
-                    action.group.waiting = 100;
+                    action.group.Patience.Stop();
                 }
 
                 Destroy(action.currentIcon.gameObject);

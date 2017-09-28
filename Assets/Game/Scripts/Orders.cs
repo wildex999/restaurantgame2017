@@ -2,6 +2,8 @@
 using Assets.Game.Scripts.UI;
 using UnityEngine;
 using System.Collections.Generic;
+using Assets.Game.Scripts.DataClasses;
+using System.Linq;
 
 namespace Assets.Game.Scripts
 {
@@ -23,6 +25,24 @@ namespace Assets.Game.Scripts
             GameManager.instance.localPlayer.DeliverOrder(this);
         }
 
+        void Update()
+        {
+            //TODO: Implement Chef and remove this part
+            List<Order> toRemove = new List<Order>();
+            foreach(Order order in orders)
+            {
+                order.timeToCreate -= Time.deltaTime;
+                if(order.timeToCreate <= 0f)
+                {
+                    GameObject.FindGameObjectWithTag("FoodDesk").GetComponent<FoodDesk>().AddFood(new Food(order.name, order.customer));
+                    toRemove.Add(order);
+                }
+            }
+
+            if(toRemove.Count > 0)
+                orders = orders.Except(toRemove).ToList();
+        }
+
         [PunRPC]
         public void AddOrder(Order order)
         {
@@ -32,8 +52,9 @@ namespace Assets.Game.Scripts
             orders.Add(order);
 
             //TODO: Implement Chef and remove this part
-            //Test food being ready
-            GameObject.FindGameObjectWithTag("FoodDesk").GetComponent<FoodDesk>().AddFood(new Food(order.name, order.customer));
+            Data.IntRange timeRange = TimingData.Instance.timeToMakeFood;
+            order.timeToCreate = UnityEngine.Random.Range(timeRange.min, timeRange.max);
+
         }
 
         /// <summary>
