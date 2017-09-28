@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Assets.Game.Scripts.UI
 {
@@ -8,6 +10,8 @@ namespace Assets.Game.Scripts.UI
         public UiFollowGameObject follow;
         [HideInInspector]
         public FadeBetweenImages imageFade;
+
+        EventTrigger trigger;
 
         public bool StopOverlap
         {
@@ -25,6 +29,49 @@ namespace Assets.Game.Scripts.UI
                     return;
                 col.enabled = value;
             }
+        }
+
+        private void Start()
+        {
+            //Setup UI events
+            trigger = gameObject.AddComponent<EventTrigger>();
+            AddUIEvent(EventTriggerType.PointerEnter, (ev) => OnHoverStart());
+            AddUIEvent(EventTriggerType.PointerExit, (ev) => OnHoverEnd());
+            AddUIEvent(EventTriggerType.PointerClick, (ev) => OnClick());
+        }
+
+        private void AddUIEvent(EventTriggerType type, UnityAction<BaseEventData> handler)
+        {
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = type;
+            entry.callback.AddListener(handler);
+
+            trigger.triggers.Add(entry);
+        }
+
+        private void OnClick()
+        {
+            if (!follow || follow.GetTarget() == null)
+                return;
+
+            //Send click to the target object
+            follow.GetTarget().SendMessage("OnMouseUpAsButton");
+        }
+
+        private void OnHoverStart()
+        {
+            if (!follow || follow.GetTarget() == null)
+                return;
+
+            follow.GetTarget().SendMessage("OnMouseOver");
+        }
+
+        private void OnHoverEnd()
+        {
+            if (!follow || follow.GetTarget() == null)
+                return;
+
+            follow.GetTarget().SendMessage("OnMouseExit");
         }
 
         void Awake()
