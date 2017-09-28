@@ -11,7 +11,7 @@ namespace Assets.Game.Scripts
         List<IActionState> states;
 
         IActionState currentState;
-        protected int currentStateId;
+        public int currentStateId;
 
         protected int stateNone = -1; //Special state doing nothing. This is the state which is set before removing(To allow cleanup of any existing state)
         protected int stateEnd = -2; //Special state which will End the action.

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114553411538739486}
   - component: {fileID: 114125333690983194}
   - component: {fileID: 114416906100195260}
+  - component: {fileID: 114246503135851448}
   m_Layer: 0
   m_Name: Female1
   m_TagString: Customer
@@ -123,7 +124,7 @@ MeshCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1977944216703272}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Convex: 1
@@ -157,6 +158,20 @@ MonoBehaviour:
   instantiationId: -1
   currentMasterID: -1
   isRuntimeInstantiated: 0
+--- !u!114 &114246503135851448
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749110871443524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eaebc9526d35df4ba0e543e2ec35472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 16
+  moveSpeed: 3.5
+  currentCorner: 0
 --- !u!114 &114416906100195260
 MonoBehaviour:
   m_ObjectHideFlags: 1

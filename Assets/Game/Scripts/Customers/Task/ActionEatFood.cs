@@ -57,15 +57,13 @@ namespace Assets.Game.Scripts.Customers.Task
             //TODO: Increment money & score depending on satisfaction?
             StatusIconLibrary.Get().ShowTaskCompleteTick(icon.transform.position);
 
-            //Since we disabled the agent when seated, we need to re-enable it.
-            GetComponent<NavMeshAgent>().enabled = true;
-
             //Mark the table as needing a cleanup
             if (group.Table)
                 group.Table.GetTable().MarkTableDirty();
             group.Table = null;
 
             //Leave the Restaurant
+            group.PlaceAtNavMesh(); //Make sure we get the customers on the NavMesh, or else they will teleport
             goToExit.SetDestination(GameObject.Find("CustomerExit").transform.position);
             SwitchState(stateLeave);
         }

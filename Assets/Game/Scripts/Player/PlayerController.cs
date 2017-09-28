@@ -10,37 +10,25 @@ namespace Assets.Game.Scripts
     {
         [Tooltip("The layer which is used for raycasting the movement position")]
         public LayerMask movementLayer;
-        [Tooltip("How fast the character turns towards the new destination")]
-        public float rotationSpeed = 16f;
         [Tooltip("How close to something the Player has to be before acting.")]
         public float actionDistance = 1f;
 
         [HideInInspector]
         public bool allowUserInput = true;
 
-
-        NavMeshAgent agent;
         ActionManager actionManager;
-        Vector3 prevDestination;
+        PathAgent agent;
 
         void Start()
         {
-            agent = GetComponent<NavMeshAgent>();
             actionManager = GetComponent<ActionManager>();
+            agent = GetComponent<PathAgent>();
         }
 
         private void Update()
         {
             if (photonView.isMine || PhotonNetwork.connected != true)
                 LocalUpdate();
-
-            //Turn the agent
-            Vector3 direction = (agent.destination - transform.position).normalized;
-            if (direction.magnitude > 0f)
-            {
-                Quaternion targetDir = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetDir, Time.deltaTime * rotationSpeed);
-            }
         }
 
         private void LocalUpdate()
@@ -124,22 +112,17 @@ namespace Assets.Game.Scripts
 
         public void SetDestination(Vector3 destination)
         {
-            agent.isStopped = false;
-            if (destination == prevDestination)
-                return;
-
             agent.SetDestination(destination);
-            prevDestination = destination;
         }
 
         public Vector3 GetDestination()
         {
-            return prevDestination;
+            return agent.GetDestination();
         }
 
         public void ClearDestination()
         {
-            agent.isStopped = true;
+            agent.ClearDestination();
         }
     }
 }

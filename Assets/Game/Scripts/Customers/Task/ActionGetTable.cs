@@ -44,7 +44,8 @@ namespace Assets.Game.Scripts.Customers.Task
             goToTable = new StateGoTo<CustomerGroup>(group, this, 1f, stateSeatTable);
             stateWalkToTable = AddState(goToTable);
 
-            SwitchState(stateWalkToDoor);
+            if(photonView.isMine)
+                SwitchState(stateWalkToDoor);
         }
 
         private void OnMouseUpAsButton()
@@ -149,7 +150,7 @@ namespace Assets.Game.Scripts.Customers.Task
             {
                 if (action.photonView.isMine)
                 {
-                    action.GetComponent<NavMeshAgent>().enabled = false;
+                    action.group.ClearDestination();
                     Vector3 tablePos = action.targetTable.transform.position;
                     action.group.transform.position = new Vector3(tablePos.x, action.group.transform.position.y, tablePos.z);
                     foreach (Chair chair in action.targetTable.GetChairs())

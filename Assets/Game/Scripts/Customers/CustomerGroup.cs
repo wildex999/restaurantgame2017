@@ -14,22 +14,57 @@ namespace Assets.Game.Scripts.Customers
         public float patience = 100;
 
         ActionManager actionManager;
-        NavMeshAgent agent;
-        Vector3 prevDestination;
         TableGroup table;
+
+        Vector3 currentDestination;
+        bool isMoving = false;
 
         private void Start()
         {
-            agent = GetComponent<NavMeshAgent>();
-            //Non-master clients don't need to move about on their own
-            if (!photonView.isMine)
-            {
-                Destroy(agent);
-                agent = null;
-            }
-
             actionManager = GetComponent<ActionManager>();
             ActionGetTable();
+        }
+
+        /// <summary>
+        /// Move the group while allowing the Customers to retain their original world position
+        /// </summary>
+        private void MoveGroupWithoutCustomers(Vector3 newPos)
+        {
+            //Store original positions of children
+            Customer[] customers = GetComponentsInChildren<Customer>();
+            Vector3[] positions = new Vector3[customers.Length];
+            for (int i = 0; i < customers.Length; i++)
+                positions[i] = customers[i].transform.position;
+
+            //Move the group then move the children back to their original position
+            transform.position = newPos;
+            for (int i = 0; i < customers.Length; i++)
+                customers[i].transform.position = positions[i];
+        }
+
+        private void Update()
+        {
+            if (!photonView.isMine)
+                return;
+
+            if (isMoving)
+            {
+                bool atDestination = true;
+                foreach (Customer customer in GetComponentsInChildren<Customer>())
+                {
+                    if(customer.GetComponent<PathAgent>().Moving())
+                    {
+                        atDestination = false;
+                        break;
+                    }
+                }
+
+                if(atDestination)
+                {
+                    isMoving = false;
+                    MoveGroupWithoutCustomers(currentDestination);
+                }
+            }
         }
 
         public void ActionGetTable()
@@ -93,28 +128,54 @@ namespace Assets.Game.Scripts.Customers
             }
         }
 
-        public void SetDestination(Vector3 destination)
+        /// <summary>
+        /// Try to place the agent at the NavMesh closest to its current position
+        /// </summary>
+        public bool PlaceAtNavMesh()
         {
-            if (agent == null)
+            if (!photonView.isMine)
+                return false;
+
+            bool placed = true;
+            foreach(Customer customer in GetComponentsInChildren<Customer>())
+            {
+                if (!customer.GetComponent<PathAgent>().PlaceAtNavMesh())
+                    placed = false;
+            }
+
+            return placed;
+        }
+
+            public void SetDestination(Vector3 destination)
+        {
+            if (!photonView.isMine)
                 return;
 
-            if(destination != prevDestination)
-                agent.SetDestination(destination);
-            agent.isStopped = false;
-            prevDestination = destination;
+            currentDestination = destination;
+            isMoving = true;
+
+            //Set destination for all Customers
+            float spread = 0.5f;
+            foreach (Customer customer in GetComponentsInChildren<Customer>())
+                customer.GetComponent<PathAgent>().SetDestination(destination + new Vector3(UnityEngine.Random.Range(-spread, spread), 0f, UnityEngine.Random.Range(-spread, spread)));
         }
 
         public Vector3 GetDestination()
         {
-            return prevDestination;
+            if (!photonView.isMine) //TODO: Return destination synced from master?
+                return transform.position;
+
+            return currentDestination;
         }
 
         public void ClearDestination()
         {
-            if (agent == null)
+            if (!photonView.isMine)
                 return;
 
-            agent.isStopped = true;
+            isMoving = false;
+            foreach (Customer customer in GetComponentsInChildren<Customer>())
+                customer.GetComponent<PathAgent>().ClearDestination();
         }
     }
 }

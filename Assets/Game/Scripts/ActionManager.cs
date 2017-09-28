@@ -10,7 +10,7 @@ namespace Assets.Game.Scripts
     /// </summary>
     public class ActionManager : Photon.PunBehaviour, IPunObservable
     {
-        List<string> syncedActions; //A list of all current Synced Actions
+        public List<string> syncedActions; //A list of all current Synced Actions
 
         public ActionManager()
         {
@@ -41,7 +41,7 @@ namespace Assets.Game.Scripts
 
         public T AddActionSynced<T>() where T : Component
         {
-            return (T)AddAction(typeof(T));
+            return (T)AddActionSynced(typeof(T));
         }
 
         /// <summary>

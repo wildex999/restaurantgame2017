@@ -25,6 +25,8 @@ namespace Assets.Game.Scripts.Player.Actions
 
         private void Start()
         {
+            sync = false;
+
             controller = GetComponent<PlayerController>();
 
             stateCleanTable = AddState(new StateCleanTable());

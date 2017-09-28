@@ -18,7 +18,7 @@ namespace Assets.Game.Scripts.Tables
 
         public void MarkTableDirty()
         {
-            actionManager.AddAction<ActionTableDirty>();
+            actionManager.AddActionSynced<ActionTableDirty>();
         }
     }
 }
