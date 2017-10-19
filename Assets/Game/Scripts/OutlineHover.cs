@@ -40,7 +40,7 @@ namespace Assets.Game.Scripts
             if (hasOutline)
                 return;
 
-            //Outline Customers
+            //Outline target
             foreach (MeshRenderer renderer in gameObject.GetComponentsInChildren<MeshRenderer>())
             {
                 if (renderer.gameObject.GetComponent<cakeslice.Outline>() == null)

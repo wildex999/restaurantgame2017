@@ -202,6 +202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   follow: {fileID: 114576207561438820}
   imageFade: {fileID: 0}
+  activeForRoles: 01000000
 --- !u!222 &222658142065169380
 CanvasRenderer:
   m_ObjectHideFlags: 1

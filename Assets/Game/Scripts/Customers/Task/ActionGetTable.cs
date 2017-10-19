@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using System;
 using Assets.Game.Scripts.DataClasses;
+using Assets.Game.Scripts.Player;
+using Assets.Game.Scripts.Util;
 
 namespace Assets.Game.Scripts.Customers.Task
 {
@@ -20,6 +22,7 @@ namespace Assets.Game.Scripts.Customers.Task
         CustomerGroup group;
         CustomerQueue queue;
         TableGroup targetTable;
+        Observable<PlayerEmployee> employee;
 
         GameStatusIcon currentIcon;
 
@@ -34,6 +37,7 @@ namespace Assets.Game.Scripts.Customers.Task
         {
             queue = FindObjectOfType<CustomerQueue>();
             group = GetComponent<CustomerGroup>();
+            employee = GameManager.instance.localPlayer.Employee();
 
             stateWaitForTable = AddState(new StateWaitForTable());
             stateSeatTable = AddState(new StateSeatTable());
@@ -55,7 +59,8 @@ namespace Assets.Game.Scripts.Customers.Task
                 return;
 
             //Task Employee with seating the customers
-            GameManager.instance.localPlayer.ActionSeatCustomerGroup(group);
+            if(employee)
+                employee.Value.ActionSeatCustomerGroup(group);
         }
 
         [PunRPC]
@@ -84,7 +89,6 @@ namespace Assets.Game.Scripts.Customers.Task
             }
 
             //Move Customers to their seats
-            //TODO: Move each customer sepparate from group
             StatusIconLibrary.Get().ShowTaskCompleteTick(currentIcon.transform.position);
             goToTable.SetDestination(targetTable.transform.position);
             SwitchState(stateWalkToTable);

@@ -1,5 +1,7 @@
-﻿using Assets.Game.Scripts.Player.Actions;
+﻿using Assets.Game.Scripts.Player;
+using Assets.Game.Scripts.Player.Actions;
 using Assets.Game.Scripts.UI;
+using Assets.Game.Scripts.Util;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,9 +11,11 @@ namespace Assets.Game.Scripts
     {
         Queue<Food> readyFood; //Food orders ready to pick up
         GameStatusIcon icon;
+        Observable<PlayerEmployee> employee;
 
         private void Start()
         {
+            employee = GameManager.instance.localPlayer.Employee();
             readyFood = new Queue<Food>();
         }
 
@@ -25,11 +29,11 @@ namespace Assets.Game.Scripts
 
         private void OnMouseUpAsButton()
         {
-            if (readyFood.Count == 0)
+            if (!employee || readyFood.Count == 0)
                 return;
 
             //Task Employee with getting food
-            GameManager.instance.localPlayer.ActionGetFood(this);
+            employee.Value.ActionGetFood(this);
         }
 
         /// <summary>

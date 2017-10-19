@@ -1,15 +1,25 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 namespace Assets.Game.Scripts.UI
 {
+    /// <summary>
+    /// Icon which will follow a object, and fade between two different images based on a patience value.
+    /// The icon will only be active and visible if the local player role matches any of those set on the icon.
+    /// </summary>
     public class GameStatusIcon : MonoBehaviour
     {
         [HideInInspector]
         public UiFollowGameObject follow;
         [HideInInspector]
         public FadeBetweenImages imageFade;
+
+        [Tooltip("Which player roles to be active for. " +
+            "If the local player has a different role than these, the icon will be invisible and disabled. " +
+            "If no role is selected, it will match all roles.")]
+        public PlayerRoles[] activeForRoles;
 
         Patience patience;
         EventTrigger trigger;
@@ -39,6 +49,9 @@ namespace Assets.Game.Scripts.UI
             AddUIEvent(EventTriggerType.PointerEnter, (ev) => OnHoverStart());
             AddUIEvent(EventTriggerType.PointerExit, (ev) => OnHoverEnd());
             AddUIEvent(EventTriggerType.PointerClick, (ev) => OnClick());
+
+            GameManager.instance.localPlayerRole.OnValueChanged += (ev) => UpdateForRole();
+            UpdateForRole();
         }
 
         private void Update()
@@ -51,6 +64,20 @@ namespace Assets.Game.Scripts.UI
 
             //Update Icon to indicate waiting time
             SetFade(1f - (patience.Remaining / patience.Initial));
+        }
+
+        private void UpdateForRole()
+        {
+            if (activeForRoles.Length == 0 || Array.IndexOf(activeForRoles, GameManager.instance.localPlayerRole.Value) != -1)
+            {
+                if (!gameObject.activeSelf)
+                    gameObject.SetActive(true);
+            }
+            else
+            {
+                if (gameObject.activeSelf)
+                    gameObject.SetActive(false);
+            }
         }
 
         private void AddUIEvent(EventTriggerType type, UnityAction<BaseEventData> handler)

@@ -8,40 +8,28 @@ namespace Assets.Game.Scripts
     /// <summary>
     /// Manages the synced adding, removal and limits of Actions on this GameObject.
     /// </summary>
-    public class ActionManager : Photon.PunBehaviour, IPunObservable
+    public class ActionManager : ComponentManager
     {
-        public List<string> syncedActions; //A list of all current Synced Actions
 
-        public ActionManager()
-        {
-            syncedActions = new List<string>();
-        }
-
-        /// <summary>
-        /// Add an action to the GameObject, and add it for any current and future client.
-        /// The action is also added to the list of observed objects.
-        /// Only one instance of each action can be added at any one time.
-        /// </summary>
-        public Component AddActionSynced(Type action)
+        public override Component AddSynced(Type action)
         {
             if (!photonView.isMine)
                 return null;
 
-            string className = action.FullName;
-            if (syncedActions.Contains(className))
-                return null;
             if (!AllowNewAction(action))
                 return null;
 
-            Component comp = AddSynced(action);
-            syncedActions.Add(className);
+            return base.AddSynced(action);
+        }
 
-            return comp;
+        public virtual Component AddActionSynced(Type action)
+        {
+            return AddSynced(action);
         }
 
         public T AddActionSynced<T>() where T : Component
         {
-            return (T)AddActionSynced(typeof(T));
+            return (T)AddSynced(typeof(T));
         }
 
         /// <summary>
@@ -69,29 +57,19 @@ namespace Assets.Game.Scripts
             return (T)AddAction(typeof(T));
         }
 
-        /// <summary>
-        /// Remove the action from both the local and remote clients, and stop syncing it.
-        /// This works for both Synced and non-synec actions.
-        /// </summary>
         public void RemoveAction(Type action)
         {
-            if (!photonView.isMine)
-                return;
-
-            string className = action.FullName;
-            syncedActions.Remove(className);
-
-            RemoveSynced(action);
+            Remove(action);
         }
 
-        public void RemoveAction(IAction action)
+        public void RemoveAction(Component action)
         {
-            RemoveAction(action.GetType());
+            Remove(action.GetType());
         }
 
         public void RemoveAction<T>()
         {
-            RemoveAction(typeof(T));
+            Remove(typeof(T));
         }
 
         /// <summary>
@@ -106,31 +84,13 @@ namespace Assets.Game.Scripts
             return actions;
         }
 
-        /// <summary>
-        /// Add and Remove any synced Actions
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="info"></param>
-        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        protected override Component DoAddSynced(Type componentType)
         {
-            if(stream.isWriting)
-            {
-                stream.SendNext(syncedActions.ToArray<string>());
-            } else
-            {
-                List<string> actions = new List<string>((string[])stream.ReceiveNext());
+            Component comp = base.DoAddSynced(componentType);
+            ((IAction)comp).OnAdd(this);
+            InformNewAction((IAction)comp);
 
-                var toAdd = actions.Except(syncedActions);
-                var toRemove = syncedActions.Except(actions);
-
-                foreach (var action in toAdd)
-                    AddSynced(Type.GetType(action));
-
-                foreach (var action in toRemove)
-                    RemoveSynced(Type.GetType(action));
-
-                syncedActions = actions;
-            }
+            return comp;
         }
 
         /// <summary>
@@ -162,28 +122,6 @@ namespace Assets.Game.Scripts
 
                 action.OnNewAction(newAction);
             }
-        }
-
-        private Component AddSynced(Type actionType)
-        {
-            Component comp = gameObject.AddComponent(actionType);
-            photonView.ObservedComponents.Add(comp);
-
-            ((IAction)comp).OnAdd(this);
-            InformNewAction((IAction)comp);
-
-            return comp;
-        }
-
-        private void RemoveSynced(Type actionType)
-        {
-            Component comp = GetComponent(actionType);
-            if (!comp)
-                return;
-
-            ((IAction)comp).OnRemove();
-            photonView.ObservedComponents.Remove(comp);
-            DestroyImmediate(comp);
         }
     }
 }

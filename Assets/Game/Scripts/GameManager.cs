@@ -1,5 +1,8 @@
 ﻿using Assets.Game.Scripts.Customers;
+using Assets.Game.Scripts.UI;
+using Assets.Game.Scripts.Util;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,12 +13,15 @@ namespace Assets.Game.Scripts
         public static GameManager instance;
         
         public GameObject playerPrefab;
+        public GameObject roleSelectPrefab;
+
         public Transform playerSpawn;
         public CustomerSpawn customerSpawn;
 
         //Local
         public PlayerController localPlayer;
-        public PlayerRoles localPlayerRole;
+        public Observable<PlayerRoles> localPlayerRole = new Observable<PlayerRoles>(PlayerRoles.None);
+
 
         #region Photon Messages
 
@@ -44,10 +50,7 @@ namespace Assets.Game.Scripts
         private void Awake()
         {
             instance = this;
-        }
 
-        void Start()
-        {
             if (playerPrefab == null)
             {
                 Debug.LogError("No player prefab set");
@@ -55,9 +58,14 @@ namespace Assets.Game.Scripts
             }
 
             Debug.Log("Instantiating Local player");
-            GameObject localPlayerObj = PhotonNetwork.Instantiate(this.playerPrefab.name, playerSpawn.position, Quaternion.identity, 0);
+            GameObject localPlayerObj = PhotonNetwork.Instantiate(playerPrefab.name, playerSpawn.position, Quaternion.identity, 0);
             localPlayer = localPlayerObj.GetComponent<PlayerController>();
-            localPlayerRole = PlayerRoles.Employee; //TODO: Allow player to select role on joining
+        }
+
+        void Start()
+        {
+            //Allow the local player to select a role
+            Instantiate(roleSelectPrefab, StatusIconLibrary.Get().mainCanvas.transform);
         }
 
         public void LeaveRoom()

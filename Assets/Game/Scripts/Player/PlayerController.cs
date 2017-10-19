@@ -1,6 +1,8 @@
 ﻿using Assets.Game.Scripts.Customers;
+using Assets.Game.Scripts.Player;
 using Assets.Game.Scripts.Player.Actions;
 using Assets.Game.Scripts.Tables;
+using Assets.Game.Scripts.Util;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,12 +19,25 @@ namespace Assets.Game.Scripts
         public bool allowUserInput = true;
 
         ActionManager actionManager;
+        ComponentManager componentManager;
         PathAgent agent;
+
+        //Observables for allowing actions to act if not null
+        Observable<PlayerEmployee> observableEmployee = new Observable<PlayerEmployee>(null);
+        Observable<PlayerChef> observableChef = new Observable<PlayerChef>(null);
+        //Observable<PlayerManager> observableManager;
 
         void Start()
         {
             actionManager = GetComponent<ActionManager>();
+            componentManager = GetComponent<ComponentManager>();
             agent = GetComponent<PathAgent>();
+
+            if(this == GameManager.instance.localPlayer)
+            {
+                SetCurrentRole(GameManager.instance.localPlayerRole.Value);
+                GameManager.instance.localPlayerRole.OnValueChanged += (ev) => SetCurrentRole(GameManager.instance.localPlayerRole.Value);
+            }
         }
 
         private void Update()
@@ -51,63 +66,55 @@ namespace Assets.Game.Scripts
             }
         }
 
-        public void ActionSeatCustomerGroup(CustomerGroup group)
+        private void SetCurrentRole(PlayerRoles newRole)
         {
-            ActionSeatCustomers action = actionManager.AddAction<ActionSeatCustomers>();
-            if (action != null)
+            //Remove the current role
+            PlayerRoles currentRole = GetCurrentRole();
+            switch(currentRole)
             {
-                action.SetCustomerGroup(group);
+                case PlayerRoles.Employee:
+                    observableEmployee.Value = null;
+                    componentManager.Remove<PlayerEmployee>();
+                    break;
+
+                case PlayerRoles.Chef:
+                    observableChef.Value = null;
+                    componentManager.Remove<PlayerChef>();
+                    break;
+
+                case PlayerRoles.Manager:
+                    //TODO
+                    break;
+            }
+
+            //Add the new role
+            switch(newRole)
+            {
+                case PlayerRoles.Employee:
+                    observableEmployee.Value = componentManager.AddSynced<PlayerEmployee>();
+                    break;
+
+                case PlayerRoles.Chef:
+                    observableChef.Value = componentManager.AddSynced<PlayerChef>();
+                    break;
+
+                case PlayerRoles.Manager:
+                    //TODO
+                    break;
             }
         }
 
-        public void ActionTakeOrder(CustomerGroup group)
+        public PlayerRoles GetCurrentRole()
         {
-            ActionTakeOrder action = actionManager.AddAction<ActionTakeOrder>();
-            if(action)
-                action.SetCustomerGroup(group);
+            if (GetComponent<PlayerEmployee>() != null)
+                return PlayerRoles.Employee;
+
+            return PlayerRoles.None;
         }
 
-        public void DeliverOrder(Orders orders)
+        public Observable<PlayerEmployee> Employee()
         {
-            ActionTakeOrder action = GetComponent<ActionTakeOrder>();
-            if (action)
-                action.DeliverOrder(orders);
-        }
-
-        public void ActionGetFood(FoodDesk foodDesk)
-        {
-            ActionDeliverFood action = actionManager.AddAction<ActionDeliverFood>();
-            if(action)
-                action.foodDesk = foodDesk;
-        }
-
-        public void DeliverFood(CustomerGroup group)
-        {
-            if (!photonView.isMine)
-                return;
-
-            ActionDeliverFood action = gameObject.GetComponent<ActionDeliverFood>();
-            if (action)
-                action.DeliverTo(group);
-        }
-
-        public void ActionTakeMoney(CustomerGroup group)
-        {
-            ActionActOnTarget action = actionManager.AddAction<ActionActOnTarget>();
-            if(action)
-            {
-                action.SetAction((Transform target) => {
-                    group.photonView.RPC("Pay", PhotonTargets.MasterClient);
-                });
-                action.SetTarget(group.transform);
-            }
-        }
-
-        public void ActionCleanTrash(Table table)
-        {
-            ActionCleanTrash action = actionManager.AddAction<ActionCleanTrash>();
-            if(action)
-                action.table = table;
+            return observableEmployee;
         }
 
         public void SetDestination(Vector3 destination)

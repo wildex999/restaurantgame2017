@@ -1,6 +1,8 @@
 ﻿using Assets.Game.Scripts.DataClasses;
+using Assets.Game.Scripts.Player;
 using Assets.Game.Scripts.Tables;
 using Assets.Game.Scripts.UI;
+using Assets.Game.Scripts.Util;
 using System;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,6 +20,7 @@ namespace Assets.Game.Scripts.Customers.Task
 
         CustomerGroup group;
         GameStatusIcon icon;
+        Observable<PlayerEmployee> employee;
 
         int stateEat;
         int statePay;
@@ -29,6 +32,7 @@ namespace Assets.Game.Scripts.Customers.Task
         private void Awake()
         {
             group = GetComponent<CustomerGroup>();
+            employee = GameManager.instance.localPlayer.Employee();
 
             stateEat = AddState(new StateEat());
             statePay = AddState(new StatePay());
@@ -46,7 +50,8 @@ namespace Assets.Game.Scripts.Customers.Task
                 return;
 
             //Task Employee with getting payment from the customers
-            GameManager.instance.localPlayer.ActionTakeMoney(group);
+            if(employee)
+                employee.Value.ActionTakeMoney(group);
         }
 
         [PunRPC]

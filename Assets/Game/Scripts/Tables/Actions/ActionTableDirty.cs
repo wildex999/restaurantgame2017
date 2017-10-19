@@ -1,7 +1,9 @@
 ﻿
 
+using Assets.Game.Scripts.Player;
 using Assets.Game.Scripts.Tables;
 using Assets.Game.Scripts.UI;
+using Assets.Game.Scripts.Util;
 using System;
 
 namespace Assets.Game.Scripts.Other.Actions
@@ -13,17 +15,20 @@ namespace Assets.Game.Scripts.Other.Actions
     {
         private GameStatusIcon icon;
         private Table table;
+        private Observable<PlayerEmployee> employee;
 
         private void Start()
         {
             table = GetComponent<Table>();
+            employee = GameManager.instance.localPlayer.Employee();
             SwitchState(AddState(new StateDirty()));
         }
 
         private void OnMouseUpAsButton()
         {
             //Task Employee with delivering trash
-            GameManager.instance.localPlayer.ActionCleanTrash(table);
+            if(employee)
+                employee.Value.ActionCleanTrash(table);
         }
 
         [PunRPC]

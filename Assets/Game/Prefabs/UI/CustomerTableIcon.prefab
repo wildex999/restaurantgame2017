@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   follow: {fileID: 114783183367000070}
   imageFade: {fileID: 0}
+  activeForRoles: 01000000
 --- !u!114 &114685473269125594
 MonoBehaviour:
   m_ObjectHideFlags: 1

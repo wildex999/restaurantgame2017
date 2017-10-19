@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using Assets.Game.Scripts.DataClasses;
 using System.Linq;
+using Assets.Game.Scripts.Util;
+using Assets.Game.Scripts.Player;
 
 namespace Assets.Game.Scripts
 {
@@ -12,17 +14,22 @@ namespace Assets.Game.Scripts
         [SerializeField]
         private List<Order> orders;
 
+        Observable<PlayerEmployee> employee;
         GameStatusIcon icon;
 
         private void Start()
         {
             orders = new List<Order>();
+            employee = GameManager.instance.localPlayer.Employee();
         }
 
         private void OnMouseUpAsButton()
         {
+            if (!employee)
+                return;
+
             //Task Employee with delivering order
-            GameManager.instance.localPlayer.DeliverOrder(this);
+            employee.Value.DeliverOrder(this);
         }
 
         void Update()

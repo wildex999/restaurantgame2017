@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b594daf7535614db04a8c774d1d13b, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: 
+  employeeModel: {fileID: 1349186185893282, guid: 8e19b889fddecda4fa39f1b8625c0ae3,
+    type: 2}
+  chefModel: {fileID: 1260458060708074, guid: e4b194f1e15567f4ca831ee7625d7054, type: 2}
+  managerModel: {fileID: 0}

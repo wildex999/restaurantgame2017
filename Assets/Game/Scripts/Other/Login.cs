@@ -18,7 +18,7 @@ namespace Assets.Game.Scripts
         /// <summary>
         /// Game version should be increased every time there is breaking changes. Network players are sepparated by their gameVersion.
         /// </summary>
-        string _gameVersion = "3";
+        string _gameVersion = "4";
 
         byte _maxPlayers = 3;
 

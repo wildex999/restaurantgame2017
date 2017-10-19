@@ -51,9 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24e7851b512d9bb47a97bc6813b7c4fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1165149932100814, guid: 2f5c2ff60ca06504fbb3616b298c8cd4,
+  playerPrefab: {fileID: 1251677578750582, guid: 6c9152edfecacb143a6ae5da1b246e23,
+    type: 2}
+  roleSelectPrefab: {fileID: 1988944563501116, guid: a064a97984c80c04a9017875e3261ce9,
     type: 2}
   playerSpawn: {fileID: 0}
   customerSpawn: {fileID: 0}
   localPlayer: {fileID: 0}
-  localPlayerRole: 0

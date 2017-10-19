@@ -1,5 +1,7 @@
 ﻿using Assets.Game.Scripts.DataClasses;
+using Assets.Game.Scripts.Player;
 using Assets.Game.Scripts.UI;
+using Assets.Game.Scripts.Util;
 using System;
 using UnityEngine;
 
@@ -16,6 +18,7 @@ namespace Assets.Game.Scripts.Customers.Task
     {
         GameStatusIcon currentIcon;
         CustomerGroup group;
+        Observable<PlayerEmployee> employee;
 
         [Tooltip("Number between 0 and 1 defining how fast they will read the menu. 0 = never, 1 = instantly")]
         public float menuReadingSpeed = 0.3f;
@@ -27,7 +30,7 @@ namespace Assets.Game.Scripts.Customers.Task
         private void Start()
         {
             group = GetComponent<CustomerGroup>();
-            //state = State.ReadingMenu;
+            employee = GameManager.instance.localPlayer.Employee();
 
             stateReadingMenu = AddState(new StateReadingMenu());
             stateWaitingOrder = AddState(new StateWaitingOrder());
@@ -84,14 +87,17 @@ namespace Assets.Game.Scripts.Customers.Task
 
         private void OnMouseUpAsButton()
         {
+            if (!employee)
+                return;
+
             if (currentStateId == stateWaitingOrder)
             {
                 //Task Employee with taking their order
-                GameManager.instance.localPlayer.ActionTakeOrder(group);
+                employee.Value.ActionTakeOrder(group);
             }
             else if (currentStateId == stateWaitingFood)
             {
-                GameManager.instance.localPlayer.DeliverFood(group);
+                employee.Value.DeliverFood(group);
             }
         }
 
